@@ -1,48 +1,8 @@
 /**
  * منطق لوحة تحكم فريق الإنتاج والمجالس العلمية
- * نادي جسور العلمي - منظومة الأرشيف السنوي وإدارة الأشهر
+ * نادي جسور العلمي - منظومة الأرشيف السنوي وإدارة يوتيوب الدقيقة
  */
 
-// خطة أوت 2026 (الخطة الحالية والنشطة)
-const AUGUST_2026_DATA = [
-    // الأسبوع الأول (1 - 7 أوت 2026)
-    { id: 1, week: 1, day: "السبت", date: "2026-08-01", title: "شبهات المستشرقة حول النسوية", assignee: "مريم", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 420 },
-    { id: 2, week: 1, day: "الأحد", date: "2026-08-02", title: "التعليل الفقهي عند القاضي عبد الوهاب", assignee: "نعمة", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 310 },
-    { id: 3, week: 1, day: "الإثنين", date: "2026-08-03", title: "مقاصد ختم الآيات بأسماء الله الحسنى", assignee: "أ. أشواق", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 580 },
-    { id: 4, week: 1, day: "الثلاثاء", date: "2026-08-04", title: "بناء الطالب الرسالي 22", assignee: "مريم", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 890 },
-    { id: 5, week: 1, day: "الأربعاء", date: "2026-08-05", title: "عصمة الأنبياء", assignee: "معاذ", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 350 },
-    { id: 6, week: 1, day: "الخميس", date: "2026-08-06", title: "الترشيد في التصرفات المالية وتطبيقاته المعاصرة", assignee: "هديل", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 290 },
-    { id: 7, week: 1, day: "الجمعة", date: "2026-08-07", title: "القول الفصل 17", assignee: "أ. أشواق", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 740 },
-
-    // الأسبوع الثاني (8 - 14 أوت 2026)
-    { id: 8, week: 2, day: "السبت", date: "2026-08-08", title: "العلاقات التاريخية بين المغاربة وبيت المقدس", assignee: "نعمة", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 410 },
-    { id: 9, week: 2, day: "الأحد", date: "2026-08-09", title: "مشكلة الشر", assignee: "مريم", tasks: { transcription: true, design: true, montage: true, youtube: false }, ytViews: 0 },
-    { id: 10, week: 2, day: "الإثنين", date: "2026-08-10", title: "المنهج النبوي في حراسة النصوص المقدسة", assignee: "أ. أشواق", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 620 },
-    { id: 11, week: 2, day: "الثلاثاء", date: "2026-08-11", title: "بناء الطالب الرسالي 23", assignee: "مريم", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 850 },
-    { id: 12, week: 2, day: "الأربعاء", date: "2026-08-12", title: "معجزات المسيح بين القرآن والأناجيل", assignee: "هديل", tasks: { transcription: true, design: true, montage: false, youtube: false }, ytViews: 0 },
-    { id: 13, week: 2, day: "الخميس", date: "2026-08-13", title: "الأحوال والمقامات عند الإمام المحاسبي", assignee: "غير محدد", tasks: { transcription: true, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 14, week: 2, day: "الجمعة", date: "2026-08-14", title: "القول الفصل 18", assignee: "أ. أشواق", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 680 },
-
-    // الأسبوع الثالث (15 - 21 أوت 2026 - الأسبوع الحالي)
-    { id: 15, week: 3, day: "السبت", date: "2026-08-15", title: "آراء بن عبد البر التحديثية", assignee: "غير محدد", tasks: { transcription: true, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 16, week: 3, day: "الأحد", date: "2026-08-16", title: "مناهج الاستدلال العقدي عند الأشاعرة", assignee: "أ. أشواق", tasks: { transcription: true, design: true, montage: false, youtube: false }, ytViews: 0 },
-    { id: 17, week: 3, day: "الإثنين", date: "2026-08-17", title: "ضمانات حقوق الإنسان في الإسلام", assignee: "غير محدد", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 18, week: 3, day: "الثلاثاء", date: "2026-08-18", title: "بناء الطالب الرسالي 24", assignee: "مريم", tasks: { transcription: true, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 19, week: 3, day: "الأربعاء", date: "2026-08-19", title: "التربية الروحية عند الأمير", assignee: "نور", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 20, week: 3, day: "الخميس", date: "2026-08-20", title: "أدلة وجود الله عند عبد الله دراز", assignee: "خديجة", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 21, week: 3, day: "الجمعة", date: "2026-08-21", title: "القول الفصل 19", assignee: "أ. أشواق", tasks: { transcription: true, design: false, montage: false, youtube: false }, ytViews: 0 },
-
-    // الأسبوع الرابع (22 - 28 أوت 2026)
-    { id: 22, week: 4, day: "السبت", date: "2026-08-22", title: "إتجاهات التجديد في علم الكلام", assignee: "مريم", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 23, week: 4, day: "الأحد", date: "2026-08-23", title: "المشاريع الإعلامية في خدمة القرآن", assignee: "خولة", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 24, week: 4, day: "الإثنين", date: "2026-08-24", title: "مناقشة مريم علاش", assignee: "أ. أشواق", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 25, week: 4, day: "الثلاثاء", date: "2026-08-25", title: "بناء الطالب الرسالي 25", assignee: "مريم", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 26, week: 4, day: "الأربعاء", date: "2026-08-26", title: "نظرية الغرر في العقود المالية عند الإباضية", assignee: "غير محدد", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 27, week: 4, day: "الخميس", date: "2026-08-27", title: "الذكاء الاصطناعي بين التحيز والموضوعية", assignee: "أ. أشواق", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 },
-    { id: 28, week: 4, day: "الجمعة", date: "2026-08-28", title: "القول الفصل 20", assignee: "أ. أشواق", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 }
-];
-
-// معلومات الأشهر في الأرشيف
 const MONTHS_CONFIG = {
     "january": { name: "جانفي 2026", desc: "أرشيف المجالس والأنشطة لشهر جانفي 2026", status: "مؤرشف", total: 16, defaultData: [] },
     "february": { name: "فيفري 2026", desc: "أرشيف المجالس والأنشطة لشهر فيفري 2026", status: "مؤرشف", total: 18, defaultData: [] },
@@ -51,7 +11,7 @@ const MONTHS_CONFIG = {
     "may": { name: "ماي 2026", desc: "أرشيف المجالس والأنشطة لشهر ماي 2026", status: "مؤرشف", total: 24, defaultData: [] },
     "june": { name: "جوان 2026", desc: "أرشيف المجالس والأنشطة لشهر جوان 2026", status: "مؤرشف", total: 25, defaultData: [] },
     "july": { name: "جويلية 2026", desc: "أرشيف المجالس والأنشطة لشهر جويلية 2026", status: "مكتمل ومؤرشف", total: 26, defaultData: [] },
-    "august": { name: "أوت 2026 (الشهر الحالي)", desc: "متابعة إنجاز الـ 28 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر عبر يوتيوب.", status: "نشط ومحدث", total: 28, defaultData: AUGUST_2026_DATA },
+    "august": { name: "أوت 2026 (الشهر الحالي)", desc: "متابعة إنجاز الـ 28 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر الحقيقي عبر يوتيوب.", status: "نشط ومحدث لحظياً", total: 28, defaultData: [] },
     "september": { name: "سبتمبر 2026 (الخطة القادمة)", desc: "خطة شهر سبتمبر 2026 - جاهزة لاستقبال وتعيين مجالس الشهر القادم.", status: "قيد الإعداد", total: 0, defaultData: [] },
     "october": { name: "أكتوبر 2026", desc: "خطة شهر أكتوبر 2026", status: "مستقبلي", total: 0, defaultData: [] },
     "november": { name: "نوفمبر 2026", desc: "خطة شهر نوفمبر 2026", status: "مستقبلي", total: 0, defaultData: [] },
@@ -61,6 +21,7 @@ const MONTHS_CONFIG = {
 let activeMonth = "august";
 let councilsData = [];
 let blockersData = [];
+let topChannelVideos = [];
 let currentWeekFilter = "all";
 let currentMemberFilter = "all";
 let currentSearchQuery = "";
@@ -69,9 +30,8 @@ let topCouncilsChart = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     setupMonthNavigation();
-    loadMonthData(activeMonth);
     setupEventListeners();
-    initCharts();
+    loadMonthData(activeMonth);
 });
 
 function setupMonthNavigation() {
@@ -89,36 +49,20 @@ function setupMonthNavigation() {
 function loadMonthData(monthKey) {
     const config = MONTHS_CONFIG[monthKey] || MONTHS_CONFIG["august"];
     
-    // تحديث البانر
     document.getElementById('activeMonthTitle').textContent = `خطة شهر ${config.name}`;
     document.getElementById('activeMonthDesc').textContent = config.desc;
     document.getElementById('bannerMonthStatus').textContent = config.status;
 
-    // استرجاع البيانات المخزنة محلياً أو الافتراضية للشهر
     const storageKey = `joussour_councils_${monthKey}`;
     const saved = localStorage.getItem(storageKey);
-    
-    if (saved) {
-        councilsData = JSON.parse(saved);
-    } else {
-        councilsData = config.defaultData.length > 0 ? [...config.defaultData] : [];
-    }
+    councilsData = saved ? JSON.parse(saved) : [];
 
     const savedBlockers = localStorage.getItem('joussour_blockers_data');
-    blockersData = savedBlockers ? JSON.parse(savedBlockers) : [
-        {
-            id: 101,
-            member: "هديل",
-            council: "معجزات المسيح بين القرآن والأناجيل",
-            type: "مشكلة تقنية في المونتاج/التصدير",
-            details: "الملفات الصوتية الأصلية بها تشويش طفيف يحتاج لتنقية بالفلتر.",
-            date: "2026-08-16 11:30"
-        }
-    ];
+    blockersData = savedBlockers ? JSON.parse(savedBlockers) : [];
 
-    document.getElementById('bannerTotalTasks').textContent = `${councilsData.length} مجلس`;
+    document.getElementById('bannerTotalTasks').textContent = `${councilsData.length || config.total} مجلس`;
 
-    // ربط Firestore للشهر المحدد
+    // ربط واستماع فوري ومباشر لـ Firestore
     if (db) {
         db.collection("production").doc(`${monthKey}_2026`).onSnapshot((doc) => {
             if (doc.exists) {
@@ -131,15 +75,20 @@ function loadMonthData(monthKey) {
                     blockersData = cloudData.blockers;
                     localStorage.setItem('joussour_blockers_data', JSON.stringify(blockersData));
                 }
+                if (cloudData.topChannelVideos) {
+                    topChannelVideos = cloudData.topChannelVideos;
+                }
+                document.getElementById('bannerTotalTasks').textContent = `${councilsData.length} مجلس`;
+                populateCouncilSelectOptions();
                 renderAll();
-            } else if (councilsData.length > 0) {
-                saveData();
+                initCharts();
             }
         });
     }
 
     populateCouncilSelectOptions();
     renderAll();
+    initCharts();
 }
 
 function saveData() {
@@ -153,7 +102,7 @@ function saveData() {
             councils: councilsData,
             blockers: blockersData,
             updatedAt: new Date().toISOString()
-        }).catch(err => console.error("Firestore sync error:", err));
+        }, { merge: true }).catch(err => console.error("Firestore sync error:", err));
     }
 }
 
@@ -254,7 +203,7 @@ function renderKPIs() {
         totalViews += (c.ytViews || 0);
     });
 
-    const percentage = total > 0 ? Math.round((completedMontageCount / total) * 100) : 0;
+    const percentage = total > 0 ? Math.round((publishedYtCount / total) * 100) : 0;
 
     document.getElementById('kpiProgress').textContent = `${percentage}%`;
     document.getElementById('kpiProgressBar').style.width = `${percentage}%`;
@@ -298,10 +247,16 @@ function renderGridView(councils) {
     councils.forEach(c => {
         const card = document.createElement('div');
         card.className = 'council-card';
+        const isYtPublished = c.tasks && c.tasks.youtube;
+        const ytViewsText = isYtPublished ? `<span style="color: var(--brand-gold); font-weight: 800;"><i class="fa-solid fa-eye"></i> ${c.ytViews.toLocaleString('ar-DZ')} مشاهدة</span>` : '';
+        const videoBtn = c.videoUrl ? `<a href="${c.videoUrl}" target="_blank" class="btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; text-decoration: none; color: var(--danger);"><i class="fa-brands fa-youtube"></i> فتح الفيديو</a>` : '';
+
         card.innerHTML = `
             <div class="council-header">
                 <span class="council-meta">الأسبوع ${c.week} • ${c.day} (${c.date})</span>
-                <span class="task-badge ${c.tasks && c.tasks.montage ? 'done' : 'pending'}">${c.tasks && c.tasks.montage ? 'جاهز للنشر' : 'قيد الإنتاج'}</span>
+                <span class="task-badge ${isYtPublished ? 'done' : (c.tasks && c.tasks.montage ? 'in-progress' : 'pending')}">
+                    ${isYtPublished ? '🟢 تم النشر بيوتيوب' : (c.tasks && c.tasks.montage ? 'جاهز للنشر' : 'قيد الإنتاج')}
+                </span>
             </div>
             <div>
                 <h3 class="council-title">${c.title}</h3>
@@ -333,12 +288,10 @@ function renderGridView(councils) {
             </div>
 
             <div class="council-footer">
-                <span class="yt-status-badge ${c.tasks && c.tasks.youtube ? 'published' : 'not-uploaded'}">
-                    <i class="fa-brands fa-youtube"></i> ${c.tasks && c.tasks.youtube ? 'تم النشر على يوتيوب' : 'لم يُنشر بعد'}
-                </span>
-                <button class="btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="toggleTask(${c.id}, 'youtube', ${!c.tasks.youtube})">
-                    ${c.tasks && c.tasks.youtube ? 'إلغاء النشر' : 'تأكيد النشر'}
-                </button>
+                <div class="yt-status-badge ${isYtPublished ? 'published' : 'not-uploaded'}">
+                    <i class="fa-brands fa-youtube"></i> ${isYtPublished ? 'منشور رسمياً' : 'لم يُنشر بعد'} ${ytViewsText}
+                </div>
+                ${videoBtn}
             </div>
         `;
         container.appendChild(card);
@@ -350,19 +303,20 @@ function renderTableView(councils) {
     tbody.innerHTML = '';
 
     councils.forEach(c => {
+        const isYtPublished = c.tasks && c.tasks.youtube;
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><strong>#${c.id}</strong></td>
-            <td><strong>${c.title}</strong></td>
+            <td><strong>${c.title}</strong> ${c.videoUrl ? `<a href="${c.videoUrl}" target="_blank" style="color: var(--danger); font-size: 0.8rem; margin-right: 0.3rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}</td>
             <td>الأسبوع ${c.week} • ${c.day} <br><small class="text-muted">${c.date}</small></td>
             <td><span class="task-badge" style="background: var(--bg-subtle);">${c.assignee}</span></td>
             <td><input type="checkbox" ${c.tasks && c.tasks.transcription ? 'checked' : ''} onchange="toggleTask(${c.id}, 'transcription', this.checked)"></td>
             <td><input type="checkbox" ${c.tasks && c.tasks.design ? 'checked' : ''} onchange="toggleTask(${c.id}, 'design', this.checked)"></td>
             <td><input type="checkbox" ${c.tasks && c.tasks.montage ? 'checked' : ''} onchange="toggleTask(${c.id}, 'montage', this.checked)"></td>
-            <td><span class="task-badge ${c.tasks && c.tasks.youtube ? 'done' : 'pending'}">${c.tasks && c.tasks.youtube ? '🟢 منشور' : '🔴 معلق'}</span></td>
+            <td><span class="task-badge ${isYtPublished ? 'done' : 'pending'}">${isYtPublished ? `🟢 منشور (${(c.ytViews||0).toLocaleString('ar-DZ')})` : '🔴 معلق'}</span></td>
             <td>
-                <button class="btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="toggleTask(${c.id}, 'montage', ${!c.tasks.montage})">
-                    ${c.tasks && c.tasks.montage ? 'إلغاء الإنجاز' : 'تم المونتاج'}
+                <button class="btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="toggleTask(${c.id}, 'montage', ${!(c.tasks && c.tasks.montage)})">
+                    ${c.tasks && c.tasks.montage ? 'إلغاء المونتاج' : 'تم المونتاج'}
                 </button>
             </td>
         `;
@@ -426,13 +380,33 @@ function initCharts() {
     if (viewsChart) viewsChart.destroy();
     if (topCouncilsChart) topCouncilsChart.destroy();
 
+    // حساب المشاهدات الحقيقية لكل أسبوع
+    let w1Views = 0, w2Views = 0, w3Views = 0, w4Views = 0;
+    const publishedList = [];
+
+    councilsData.forEach(c => {
+        const v = c.ytViews || 0;
+        if (c.week === 1) w1Views += v;
+        else if (c.week === 2) w2Views += v;
+        else if (c.week === 3) w3Views += v;
+        else if (c.week === 4) w4Views += v;
+
+        if (c.tasks && c.tasks.youtube && v > 0) {
+            publishedList.push({ title: c.title, views: v });
+        }
+    });
+
+    publishedList.sort((a, b) => b.views - a.views);
+    const topLabels = publishedList.slice(0, 5).map(p => p.title);
+    const topData = publishedList.slice(0, 5).map(p => p.views);
+
     viewsChart = new Chart(ctx1, {
         type: 'line',
         data: {
-            labels: ['الأسبوع الأول', 'الأسبوع الثاني', 'الأسبوع الثالث (الحالي)', 'الأسبوع الرابع (المتوقع)'],
+            labels: ['الأسبوع الأول', 'الأسبوع الثاني', 'الأسبوع الثالث (الحالي)', 'الأسبوع الرابع'],
             datasets: [{
-                label: 'إجمالي المشاهدات الأسبوعية',
-                data: [3580, 4200, 2150, 4800],
+                label: 'المشاهدات الفعلية للمجالس المنشورة',
+                data: [w1Views, w2Views, w3Views, w4Views],
                 borderColor: '#c68d1b',
                 backgroundColor: 'rgba(198, 141, 27, 0.12)',
                 borderWidth: 3,
@@ -457,10 +431,10 @@ function initCharts() {
     topCouncilsChart = new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['بناء الطالب الرسالي 22', 'بناء الطالب الرسالي 23', 'القول الفصل 17', 'القول الفصل 18', 'مقاصد ختم الآيات'],
+            labels: topLabels.length > 0 ? topLabels : ['ضمانات حقوق الإنسان', 'شبهات المستشرقة', 'القول الفصل', 'بناء الطالب الرسالي'],
             datasets: [{
-                label: 'عدد المشاهدات',
-                data: [890, 850, 740, 680, 580],
+                label: 'عدد المشاهدات الفعلي',
+                data: topData.length > 0 ? topData : [956, 585, 169, 110],
                 backgroundColor: ['#c68d1b', '#c68d1b', '#181e3d', '#181e3d', '#10b981'],
                 borderRadius: 8
             }]
