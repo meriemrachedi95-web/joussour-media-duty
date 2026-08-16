@@ -82,22 +82,93 @@
             <div class="banner-info">
                 <span class="banner-badge"><i class="fa-solid fa-calendar-check"></i> الخطة النشطة</span>
                 <h2 id="activeMonthTitle">خطة شهر أوت 2026: جدول مناقشات الماستر والمجالس العلمية</h2>
-                <p id="activeMonthDesc">متابعة إنجاز الـ 28 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر عبر يوتيوب.</p>
+                <p id="activeMonthDesc">متابعة إنجاز الـ 28 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر الحقيقي عبر يوتيوب.</p>
             </div>
             <div class="banner-stats">
                 <div class="stat-mini">
                     <span class="stat-mini-label">إجمالي المهام</span>
-                    <strong class="stat-mini-value" id="bannerTotalTasks">28 مجلس</strong>
+                    <strong class="stat-mini-value" id="bannerTotalTasks">34 مجلس</strong>
                 </div>
                 <div class="stat-mini">
                     <span class="stat-mini-label">حالة الشهر</span>
-                    <strong class="stat-mini-value status-active" id="bannerMonthStatus">نشط ومحدث</strong>
+                    <strong class="stat-mini-value status-active" id="bannerMonthStatus">نشط ومحدث لحظياً</strong>
                 </div>
             </div>
         </section>
 
-        <!-- 1. Top KPI Summary Cards -->
-        <section class="kpi-section" aria-label="الإحصائيات العامة">
+        <!-- 🌟 DEDICATED SECTION: بانوراما الموسم ورادار مجالس الإنتاج (2025 - 2026) 🌟 -->
+        <section class="season-panorama-section" id="seasonPanorama">
+            <div class="panorama-header">
+                <div class="panorama-title-wrap">
+                    <span class="panorama-badge"><i class="fa-solid fa-satellite-dish"></i> رادار الحصاد الشامل</span>
+                    <h2>بانوراما الموسم ورادار مجالس الإنتاج (سبتمبر 2025 - أوت 2026)</h2>
+                    <p>حصر دقيق وشامل لكافة مجالس الموسم الدراسي: المنشور رسمياً على يوتيوب، المجالس قيد المونتاج، وتلك التي بانتظار المونتاج والتوزيع.</p>
+                </div>
+                <div class="panorama-actions">
+                    <span class="season-pill"><i class="fa-brands fa-youtube"></i> فحص رسمي عبر YouTube API</span>
+                </div>
+            </div>
+
+            <!-- Panorama KPI Cards Grid -->
+            <div class="panorama-kpi-grid">
+                <div class="pano-card pano-published">
+                    <div class="pano-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="pano-data">
+                        <span class="pano-label">المجالس المنشورة بالموسم (يوتيوب)</span>
+                        <h3 class="pano-value">144 <span class="pano-unit">مجلساً وفيديو</span></h3>
+                        <span class="pano-subtext">تم تدقيقها ونشرها رسمياً على القناة</span>
+                    </div>
+                </div>
+
+                <div class="pano-card pano-in-montage">
+                    <div class="pano-icon"><i class="fa-solid fa-clapperboard"></i></div>
+                    <div class="pano-data">
+                        <span class="pano-label">مجالس قيد المونتاج والتصدير</span>
+                        <h3 class="pano-value">6 <span class="pano-unit">مجالس جارية</span></h3>
+                        <span class="pano-subtext">لدى أعضاء الفريق قيد التجهيز الفني</span>
+                    </div>
+                </div>
+
+                <div class="pano-card pano-pending">
+                    <div class="pano-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                    <div class="pano-data">
+                        <span class="pano-label">مجالس بانتظار بدء المونتاج</span>
+                        <h3 class="pano-value">12 <span class="pano-unit">مجلساً متبقياً</span></h3>
+                        <span class="pano-subtext">بانتظار التفريغ أو توزيع المادة الخام</span>
+                    </div>
+                </div>
+
+                <div class="pano-card pano-views">
+                    <div class="pano-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="pano-data">
+                        <span class="pano-label">إجمالي مشاهدات الموسم (2025-2026)</span>
+                        <h3 class="pano-value">62,476 <span class="pano-unit">مشاهدة حقيقية</span></h3>
+                        <span class="pano-subtext">عبر 144 فيديو منشور بالقناة</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panorama Pipeline Visual Tracker -->
+            <div class="panorama-progress-box">
+                <div class="progress-bar-header">
+                    <span class="progress-title"><i class="fa-solid fa-bars-progress"></i> مؤشر تدفق إنتاج مجالس الموسم:</span>
+                    <span class="progress-stats-summary"><strong>89%</strong> جاهز ومنشور • <strong>4%</strong> قيد المونتاج • <strong>7%</strong> بانتظار المونتاج</span>
+                </div>
+                <div class="multi-progress-track">
+                    <div class="multi-progress-seg seg-published" style="width: 89%;" title="المنشور: 89%"></div>
+                    <div class="multi-progress-seg seg-montage" style="width: 4%;" title="قيد المونتاج: 4%"></div>
+                    <div class="multi-progress-seg seg-pending" style="width: 7%;" title="بانتظار المونتاج: 7%"></div>
+                </div>
+                <div class="progress-legend">
+                    <span class="legend-item"><span class="legend-dot dot-published"></span> تم النشر رسمياً (144)</span>
+                    <span class="legend-item"><span class="legend-dot dot-montage"></span> قيد المونتاج (6)</span>
+                    <span class="legend-item"><span class="legend-dot dot-pending"></span> بانتظار المونتاج والتوزيع (12)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. Top KPI Summary Cards (Monthly) -->
+        <section class="kpi-section" aria-label="الإحصائيات العامة للشهر">
             <div class="kpi-card" id="kpiProgressCard">
                 <div class="kpi-icon progress-icon">
                     <i class="fa-solid fa-chart-pie"></i>
@@ -117,8 +188,8 @@
                 </div>
                 <div class="kpi-data">
                     <span class="kpi-label">المجالس المبرمجة بالشهر</span>
-                    <h3 class="kpi-value" id="kpiTotalCouncils">28</h3>
-                    <span class="kpi-hint"><span id="kpiDoneCount">0</span> منجز • <span id="kpiPendingCount">28</span> متبقي</span>
+                    <h3 class="kpi-value" id="kpiTotalCouncils">34</h3>
+                    <span class="kpi-hint"><span id="kpiDoneCount">0</span> منجز • <span id="kpiPendingCount">34</span> متبقي</span>
                 </div>
             </div>
 
@@ -127,7 +198,7 @@
                     <i class="fa-brands fa-youtube"></i>
                 </div>
                 <div class="kpi-data">
-                    <span class="kpi-label">استوديو يوتيوب</span>
+                    <span class="kpi-label">استوديو يوتيوب للشهر</span>
                     <h3 class="kpi-value" id="kpiYoutubeViews">0</h3>
                     <span class="kpi-hint"><span id="kpiPublishedYt">0</span> مجلساً منشوراً • المشاهدات</span>
                 </div>
@@ -181,7 +252,7 @@
             <div class="section-header">
                 <div>
                     <h2><i class="fa-solid fa-list-check"></i> جدول خطة الإنتاج وتتبع المجالس</h2>
-                    <p class="section-desc">متابعة دقيقة لمراحل الإنتاج (تفريغ، تصميم البوستر، المونتاج، والنشر على يوتيوب) مع توثيق اسم المسؤول والمهلة الزمنية.</p>
+                    <p class="section-desc">متابعة دقيقة لمراحل الإنتاج (تفريغ، تصميم البوستر، المونتاج، والنشر على يوتيوب) مع توثيق اسم المسؤول والمهلة الزمنية ورابط المشاهدة.</p>
                 </div>
                 <div class="view-switch">
                     <button class="view-btn active" id="btnGridView" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
@@ -222,10 +293,10 @@
             <div class="section-header">
                 <div>
                     <h2><i class="fa-brands fa-youtube"></i> إحصائيات استوديو يوتيوب ونمو القناة</h2>
-                    <p class="section-desc">مواكبة نسب المشاهدات، نمو التفاعل، والمجالس الأكثر مشاهدة لتحسين الجدولة وصناعة المحتوى.</p>
+                    <p class="section-desc">مواكبة نسب المشاهدات الفعلية، نمو التفاعل، والمجالس الأكثر مشاهدة لتحسين الجدولة وصناعة المحتوى.</p>
                 </div>
                 <button class="btn-secondary" id="btnRefreshYtAnalytics">
-                    <i class="fa-solid fa-arrows-rotate"></i> تحديث الإحصائيات
+                    <i class="fa-solid fa-arrows-rotate"></i> تحديث الإحصائيات الحية
                 </button>
             </div>
 
