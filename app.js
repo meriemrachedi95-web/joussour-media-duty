@@ -1,6 +1,6 @@
 /**
  * منطق لوحة تحكم فريق الإنتاج والمجالس العلمية
- * نادي جسور العلمي - منظومة الأرشيف السنوي والتمييز بين المجالس والمناقشات
+ * نادي جسور العلمي - المستكشف التفاعلي لمجالس ومناقشات الموسم
  */
 
 const MONTHS_CONFIG = {
@@ -29,10 +29,18 @@ let currentSearchQuery = "";
 let viewsChart = null;
 let topCouncilsChart = null;
 
+// مستكشف تفاصيل مجالس ومناقشات الموسم
+let seasonalInventory = typeof SEASONAL_INVENTORY_DATA !== 'undefined' ? SEASONAL_INVENTORY_DATA : [];
+let currentExplorerFilter = "all";
+let currentExplorerSearch = "";
+
 document.addEventListener('DOMContentLoaded', () => {
     setupMonthNavigation();
     setupEventListeners();
+    setupPanoramaInteractiveCards();
+    setupExplorerListeners();
     loadMonthData(activeMonth);
+    renderSeasonalExplorer();
 });
 
 function getCouncilType(title) {
@@ -42,6 +50,210 @@ function getCouncilType(title) {
         return "discussion";
     }
     return "council";
+}
+
+/* ==========================================================================
+   🔗 تفاعلية بطاقات رادار الموسم: النقر المباشر والانتقال إلى التفاصيل
+   ========================================================================== */
+function setupPanoramaInteractiveCards() {
+    const btnPub = document.getElementById('btnPanoPublished');
+    const btnMon = document.getElementById('btnPanoInMontage');
+    const btnUnm = document.getElementById('btnPanoUnmontaged');
+    const btnViews = document.getElementById('btnPanoViews');
+    const btnCouncils = document.getElementById('btnFilterCouncilsOnly');
+    const btnDisc = document.getElementById('btnFilterDiscussionsOnly');
+
+    if (btnPub) {
+        btnPub.addEventListener('click', () => {
+            setExplorerFilter('PUBLISHED', '🟢 عرض المجالس والمناقشات المنشورة رسمياً على يوتيوب (144 مجلساً ومناقشة)');
+        });
+    }
+
+    if (btnMon) {
+        btnMon.addEventListener('click', () => {
+            setExplorerFilter('IN_MONTAGE', '🟡 عرض المجالس والمناقشات الجارية قيد المونتاج والتصدير الفني (8 مجالس)');
+        });
+    }
+
+    if (btnUnm) {
+        btnUnm.addEventListener('click', () => {
+            setExplorerFilter('UNMONTAGED', '🔴 عرض رصيد المواد والتسجيلات الخام غير الممنتجة بانتظار المونتاج (~100 مادة)');
+        });
+    }
+
+    if (btnCouncils) {
+        btnCouncils.addEventListener('click', () => {
+            setExplorerFilter('council', '📚 تفاصيل المجالس العلمية والدورات التأصيلية (المنشورة والمتبقية)');
+        });
+    }
+
+    if (btnDisc) {
+        btnDisc.addEventListener('click', () => {
+            setExplorerFilter('discussion', '🎓 تفاصيل المناقشات العلمية ومناقشات الماستر والدكتوراه');
+        });
+    }
+
+    if (btnViews) {
+        btnViews.addEventListener('click', () => {
+            const el = document.getElementById('analyticsSection');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+}
+
+function setExplorerFilter(filterType, customSubtitle = '') {
+    currentExplorerFilter = filterType;
+    document.querySelectorAll('.exp-chip').forEach(chip => {
+        if (chip.dataset.filter === filterType) {
+            chip.classList.add('active');
+        } else {
+            chip.classList.remove('active');
+        }
+    });
+
+    if (customSubtitle) {
+        const sub = document.getElementById('explorerSubtitle');
+        if (sub) sub.textContent = customSubtitle;
+    }
+
+    renderSeasonalExplorer();
+
+    const explorerEl = document.getElementById('seasonalInventoryExplorer');
+    if (explorerEl) {
+        explorerEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function setupExplorerListeners() {
+    document.querySelectorAll('.exp-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('.exp-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            currentExplorerFilter = chip.dataset.filter;
+            renderSeasonalExplorer();
+        });
+    });
+
+    const searchInput = document.getElementById('explorerSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentExplorerSearch = e.target.value.trim().toLowerCase();
+            renderSeasonalExplorer();
+        });
+    }
+
+    const btnGrid = document.getElementById('btnExplorerGrid');
+    const btnTable = document.getElementById('btnExplorerTable');
+    const gridEl = document.getElementById('explorerCardsContainer');
+    const tableEl = document.getElementById('explorerTableContainer');
+
+    if (btnGrid && btnTable) {
+        btnGrid.addEventListener('click', () => {
+            btnGrid.classList.add('active');
+            btnTable.classList.remove('active');
+            gridEl.style.display = 'grid';
+            tableEl.style.display = 'none';
+        });
+
+        btnTable.addEventListener('click', () => {
+            btnTable.classList.add('active');
+            btnGrid.classList.remove('active');
+            gridEl.style.display = 'none';
+            tableEl.style.display = 'block';
+        });
+    }
+}
+
+function renderSeasonalExplorer() {
+    const grid = document.getElementById('explorerCardsContainer');
+    const tbody = document.getElementById('explorerTableBody');
+    if (!grid || !tbody) return;
+
+    grid.innerHTML = '';
+    tbody.innerHTML = '';
+
+    // تصفية العناصر
+    const filtered = seasonalInventory.filter(item => {
+        let matchesFilter = true;
+        if (currentExplorerFilter === 'PUBLISHED') matchesFilter = (item.status === 'PUBLISHED');
+        else if (currentExplorerFilter === 'IN_MONTAGE') matchesFilter = (item.status === 'IN_MONTAGE');
+        else if (currentExplorerFilter === 'UNMONTAGED') matchesFilter = (item.status === 'UNMONTAGED');
+        else if (currentExplorerFilter === 'council') matchesFilter = (item.category === 'council');
+        else if (currentExplorerFilter === 'discussion') matchesFilter = (item.category === 'discussion');
+
+        let matchesSearch = true;
+        if (currentExplorerSearch) {
+            const targetStr = `${item.title} ${item.series} ${item.instructor} ${item.councilNumber}`.toLowerCase();
+            matchesSearch = targetStr.includes(currentExplorerSearch);
+        }
+
+        return matchesFilter && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-blockers" style="grid-column: 1/-1;">
+                <i class="fa-solid fa-folder-open"></i>
+                <p>لا توجد نتائج تطابق البحث في رصيد المجالس والمناقشات.</p>
+            </div>
+        `;
+        return;
+    }
+
+    filtered.forEach(item => {
+        // بطاقة المستكشف (Grid Card)
+        const card = document.createElement('div');
+        card.className = 'council-card';
+        
+        let statusBadge = '';
+        if (item.status === 'PUBLISHED') {
+            statusBadge = `<span class="task-badge done"><i class="fa-solid fa-circle-check"></i> منشور بيوتيوب</span>`;
+        } else if (item.status === 'IN_MONTAGE') {
+            statusBadge = `<span class="task-badge in-progress"><i class="fa-solid fa-clapperboard"></i> قيد المونتاج والتجهيز</span>`;
+        } else {
+            statusBadge = `<span class="task-badge pending" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa-solid fa-clock"></i> بانتظار المونتاج</span>`;
+        }
+
+        const typeBadge = item.category === 'discussion' 
+            ? `<span class="category-tag tag-discussion"><i class="fa-solid fa-graduation-cap"></i> مناقشة</span>` 
+            : `<span class="category-tag tag-council"><i class="fa-solid fa-book-open"></i> مجلس</span>`;
+
+        const numText = item.councilNumber ? `<span class="council-meta">رقم المجلس: #${item.councilNumber}</span>` : '';
+        const ytBtn = item.videoUrl ? `<a href="${item.videoUrl}" target="_blank" class="btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; text-decoration: none; color: var(--danger);"><i class="fa-brands fa-youtube"></i> فتح الفيديو</a>` : '';
+        const viewsText = item.views > 0 ? `<span style="color: var(--brand-gold); font-weight: 800;"><i class="fa-solid fa-eye"></i> ${item.views.toLocaleString('ar-DZ')} مشاهدة</span>` : '';
+
+        card.innerHTML = `
+            <div class="council-header">
+                <div>${typeBadge}</div>
+                <div>${statusBadge}</div>
+            </div>
+            <div>
+                <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">${item.series}</span>
+                <h3 class="council-title">${item.title}</h3>
+                <div class="council-assignee" style="margin-top: 0.35rem;">
+                    <i class="fa-solid fa-user-tie"></i> <span>${item.instructor}</span>
+                </div>
+            </div>
+            <div class="council-footer" style="margin-top: auto;">
+                <div>${numText} ${viewsText}</div>
+                <div>${ytBtn}</div>
+            </div>
+        `;
+        grid.appendChild(card);
+
+        // سطر الجدول (Table Row)
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>#${item.id}</strong></td>
+            <td><strong>${item.title}</strong></td>
+            <td>${typeBadge} <small>${item.series}</small></td>
+            <td><span class="council-meta">${item.councilNumber ? '#' + item.councilNumber : '-'}</span></td>
+            <td>${item.instructor}</td>
+            <td>${statusBadge}</td>
+            <td>${item.views > 0 ? `<strong>${item.views.toLocaleString('ar-DZ')} مشاهدة</strong> ` : ''} ${ytBtn}</td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 function setupMonthNavigation() {
