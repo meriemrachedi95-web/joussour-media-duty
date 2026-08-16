@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة متابعة فريق الإنتاج والمجالس العلمية | نادي جسور العلمي</title>
-    <meta name="description" content="منصة متكاملة لأمينة الإعلام وفريق الإنتاج لمتابعة خطة النشر الأسبوعية والشهرية، رصد إنجاز المجالس، متابعة استوديو يوتيوب، ورفع الاستشكالات.">
+    <title>منصة متابعة الإنتاج والمجالس العلمية | نادي جسور العلمي</title>
+    <meta name="description" content="منصة متكاملة وأرشيف سنوي لأمينة الإعلام وفريق الإنتاج لمتابعة خطط النشر الشهرية والأسبوعية، رصد إنجاز المجالس، ومتابعة يوتيوب.">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
     <!-- Google Fonts: Cairo & Readex Pro -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Readex+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js for YouTube Analytics -->
@@ -17,34 +19,82 @@
 </head>
 <body>
 
-    <!-- Header & Navigation -->
+    <!-- Header & Brand Navigation -->
     <header class="app-header">
         <div class="header-container">
             <div class="brand-wrapper">
-                <div class="logo-circle">
-                    <i class="fa-solid fa-film"></i>
+                <div class="logo-wrapper">
+                    <img src="logo.png" alt="شعار نادي جسور العلمي" class="brand-logo-img">
                 </div>
                 <div class="brand-text">
-                    <h1>منصة متابعة فريق الإنتاج والمجالس</h1>
-                    <span class="sub-brand">خلية الإعلام • نادي جسور العلمي • خطة أوت 2026</span>
+                    <h1>منصة متابعة الإنتاج والمجالس العلمية</h1>
+                    <span class="sub-brand">نادي جسور العلمي • نحو أفق الفكر والمعرفة • خلية الإعلام</span>
                 </div>
             </div>
 
             <div class="header-actions">
                 <div class="sync-badge" id="syncStatus">
                     <span class="status-dot online"></span>
-                    <span id="syncText">قاعدة البيانات: متصل</span>
+                    <span id="syncText">Firestore: متصل ومزامن</span>
                 </div>
                 <button class="btn-primary" id="btnOpenBlockerModal">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    <span>رفع استشكال / طلب مساعدة</span>
+                    <span>رفع استشكال / مساعدة</span>
                 </button>
             </div>
         </div>
     </header>
 
+    <!-- Months Navigation Bar & Archive (شريط الأشهر السنوي والأرشيف) -->
+    <nav class="months-nav-bar" aria-label="أرشيف الأشهر السنوية">
+        <div class="months-container">
+            <div class="months-label">
+                <i class="fa-solid fa-box-archive"></i>
+                <span>أرشيف الأشهر (2026):</span>
+            </div>
+            <div class="months-scroll" id="monthsScrollList">
+                <button class="month-chip" data-month="january">جانفي</button>
+                <button class="month-chip" data-month="february">فيفري</button>
+                <button class="month-chip" data-month="march">مارس</button>
+                <button class="month-chip" data-month="april">أفريل</button>
+                <button class="month-chip" data-month="may">ماي</button>
+                <button class="month-chip" data-month="june">جوان</button>
+                <button class="month-chip" data-month="july">جويلية</button>
+                <button class="month-chip current-month active" data-month="august">
+                    <span class="sparkle-dot"></span>
+                    <span>أوت (الحالي)</span>
+                </button>
+                <button class="month-chip next-month" data-month="september">
+                    <span>سبتمبر (القادم)</span>
+                </button>
+                <button class="month-chip" data-month="october">أكتوبر</button>
+                <button class="month-chip" data-month="november">نوفمبر</button>
+                <button class="month-chip" data-month="december">ديسمبر</button>
+            </div>
+        </div>
+    </nav>
+
     <!-- Main Container -->
     <main class="main-content">
+
+        <!-- Active Month Banner -->
+        <section class="active-month-banner">
+            <div class="banner-info">
+                <span class="banner-badge"><i class="fa-solid fa-calendar-check"></i> الخطة النشطة</span>
+                <h2 id="activeMonthTitle">خطة شهر أوت 2026: جدول مناقشات الماستر والمجالس العلمية</h2>
+                <p id="activeMonthDesc">متابعة إنجاز الـ 28 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر عبر يوتيوب.</p>
+            </div>
+            <div class="banner-stats">
+                <div class="stat-mini">
+                    <span class="stat-mini-label">إجمالي المهام</span>
+                    <strong class="stat-mini-value" id="bannerTotalTasks">28 مجلس</strong>
+                </div>
+                <div class="stat-mini">
+                    <span class="stat-mini-label">حالة الشهر</span>
+                    <strong class="stat-mini-value status-active" id="bannerMonthStatus">نشط ومحدث</strong>
+                </div>
+            </div>
+        </section>
 
         <!-- 1. Top KPI Summary Cards -->
         <section class="kpi-section" aria-label="الإحصائيات العامة">
@@ -53,8 +103,8 @@
                     <i class="fa-solid fa-chart-pie"></i>
                 </div>
                 <div class="kpi-data">
-                    <span class="kpi-label">نسبة الإنجاز العامة</span>
-                    <h2 class="kpi-value" id="kpiProgress">0%</h2>
+                    <span class="kpi-label">نسبة الإنجاز الشهرية</span>
+                    <h3 class="kpi-value" id="kpiProgress">0%</h3>
                     <div class="progress-track">
                         <div class="progress-bar" id="kpiProgressBar" style="width: 0%;"></div>
                     </div>
@@ -66,8 +116,8 @@
                     <i class="fa-solid fa-book-open"></i>
                 </div>
                 <div class="kpi-data">
-                    <span class="kpi-label">إجمالي المجالس المبرمجة</span>
-                    <h2 class="kpi-value" id="kpiTotalCouncils">28</h2>
+                    <span class="kpi-label">المجالس المبرمجة بالشهر</span>
+                    <h3 class="kpi-value" id="kpiTotalCouncils">28</h3>
                     <span class="kpi-hint"><span id="kpiDoneCount">0</span> منجز • <span id="kpiPendingCount">28</span> متبقي</span>
                 </div>
             </div>
@@ -78,8 +128,8 @@
                 </div>
                 <div class="kpi-data">
                     <span class="kpi-label">استوديو يوتيوب</span>
-                    <h2 class="kpi-value" id="kpiYoutubeViews">0</h2>
-                    <span class="kpi-hint"><span id="kpiPublishedYt">0</span> مجلساً منشوراً • المشاهدات أسبوعياً</span>
+                    <h3 class="kpi-value" id="kpiYoutubeViews">0</h3>
+                    <span class="kpi-hint"><span id="kpiPublishedYt">0</span> مجلساً منشوراً • المشاهدات</span>
                 </div>
             </div>
 
@@ -88,14 +138,14 @@
                     <i class="fa-solid fa-headset"></i>
                 </div>
                 <div class="kpi-data">
-                    <span class="kpi-label">الاستشكالات والدعم</span>
-                    <h2 class="kpi-value" id="kpiBlockersCount">0</h2>
-                    <span class="kpi-hint">استشكالات بحاجة لمتابعة</span>
+                    <span class="kpi-label">صندوق الاستشكالات</span>
+                    <h3 class="kpi-value" id="kpiBlockersCount">0</h3>
+                    <span class="kpi-hint">استشكالات معلقة بحاجة لحل</span>
                 </div>
             </div>
         </section>
 
-        <!-- 2. Controls & Filters -->
+        <!-- 2. Controls & Week Filters -->
         <section class="controls-section">
             <div class="tabs-wrapper" role="tablist">
                 <button class="tab-btn active" data-week="all"><i class="fa-solid fa-calendar-days"></i> كل الأسابيع</button>
@@ -130,8 +180,8 @@
         <section class="pipeline-section">
             <div class="section-header">
                 <div>
-                    <h2><i class="fa-solid fa-list-check"></i> جدول خطة الإنتاج ونشر المجالس</h2>
-                    <p class="section-desc">متابعة دقيقة لمراحل الإنتاج (تفريغ، تصميم البوستر، المونتاج، والرفع على يوتيوب) مع توثيق اسم المسؤول والمهلة الزمنية.</p>
+                    <h2><i class="fa-solid fa-list-check"></i> جدول خطة الإنتاج وتتبع المجالس</h2>
+                    <p class="section-desc">متابعة دقيقة لمراحل الإنتاج (تفريغ، تصميم البوستر، المونتاج، والنشر على يوتيوب) مع توثيق اسم المسؤول والمهلة الزمنية.</p>
                 </div>
                 <div class="view-switch">
                     <button class="view-btn active" id="btnGridView" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
@@ -207,10 +257,6 @@
 
             <div class="blockers-list" id="blockersList">
                 <!-- Dynamically populated via app.js -->
-                <div class="empty-blockers">
-                    <i class="fa-solid fa-circle-check"></i>
-                    <p>الحمد لله، لا توجد استشكالات معلقة حالياً. سير العمل منتظم!</p>
-                </div>
             </div>
         </section>
 
@@ -269,7 +315,10 @@
 
     <!-- Footer -->
     <footer class="app-footer">
-        <p>© 2026 نادي جسور العلمي • خلية الإعلام والمحتوى الرقمي • منصة المتابعة الذكية</p>
+        <div class="footer-content">
+            <img src="logo.png" alt="شعار جسور" class="footer-logo">
+            <p>© 2026 نادي جسور العلمي • نحو أفق الفكر والمعرفة • خلية الإعلام والمحتوى الرقمي</p>
+        </div>
     </footer>
 
     <!-- Firebase SDK & App Scripts -->
