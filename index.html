@@ -19,7 +19,7 @@
 </head>
 <body>
 
-    <!-- Header & Brand Navigation -->
+    <!-- Header & Brand Navigation (ثابت في كل الواجهات) -->
     <header class="app-header">
         <div class="header-container">
             <div class="brand-wrapper">
@@ -37,10 +37,6 @@
                     <span class="status-dot online"></span>
                     <span id="syncText">Firestore: متصل ومزامن</span>
                 </div>
-                <button class="btn-secondary" id="btnOpenFullArchive">
-                    <i class="fa-solid fa-folder-open"></i>
-                    <span>سجل الموسم الشامل</span>
-                </button>
                 <button class="btn-primary" id="btnOpenBlockerModal">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span>رفع استشكال / مساعدة</span>
@@ -78,344 +74,366 @@
         </div>
     </nav>
 
-    <!-- Main Container -->
-    <main class="main-content">
+    <!-- =========================================================================
+         SCREEN 1: الواجهة الأساسية الرسمية (Main Dashboard View)
+         ========================================================================= -->
+    <div id="mainDashboardView" class="view-screen active">
+        <main class="main-content">
 
-        <!-- 🌟 DEDICATED SECTION: بانوراما الموسم ورادار مجالس الإنتاج 🌟 -->
-        <section class="season-panorama-section" id="seasonPanorama">
-            <div class="panorama-header">
-                <div class="panorama-title-wrap">
-                    <span class="panorama-badge"><i class="fa-solid fa-satellite-dish"></i> استقراء ورادار الإنتاج التراكمي الشامل</span>
-                    <h2>المرصد الشامل لمجالس ومناقشات الموسم (سبتمبر 2025 - أوت 2026)</h2>
-                    <p>إحصاء دقيق للمحتوى العلمي للنادي مع التمييز بين <strong>المجالس العلمية والدورات</strong> وبين <strong>المناقشات العلمية</strong>، وحصر رصيد المواد غير الممنتجة. <em>(اضغطي على أي بطاقة لعرض تفاصيلها في نافذة مخصصة مستقلة)</em>.</p>
-                </div>
-                <div class="panorama-actions">
-                    <span class="season-pill"><i class="fa-brands fa-youtube"></i> متصل بـ YouTube API & Telegram</span>
-                </div>
-            </div>
-
-            <!-- Panorama KPI Interactive Cards Grid (النقر يفتح النافذة المخصصة مباشرة) -->
-            <div class="panorama-kpi-grid">
-                <div class="pano-card pano-published clickable-card" id="btnPanoPublished" title="انقري لعرض كل المجالس المنشورة بيوتيوب في نافذة مستقلة">
-                    <div class="pano-icon"><i class="fa-solid fa-circle-check"></i></div>
-                    <div class="pano-data">
-                        <span class="pano-label">المجالس والمناقشات المنشورة (يوتيوب)</span>
-                        <h3 class="pano-value">144 <span class="pano-unit">مجلساً ومناقشة</span></h3>
-                        <span class="pano-subtext">🟢 102 مجلساً علمياً • 42 مناقشة علمية <i class="fa-solid fa-arrow-up-right-from-square click-hint"></i></span>
+            <!-- 1. الشريط الأول: شريط الإحصائيات ورادار الموسم (Panorama Radar) -->
+            <section class="season-panorama-section" id="seasonPanorama">
+                <div class="panorama-header">
+                    <div class="panorama-title-wrap">
+                        <span class="panorama-badge"><i class="fa-solid fa-satellite-dish"></i> استقراء ورادار الإنتاج التراكمي الشامل</span>
+                        <h2>المرصد الشامل لمجالس ومناقشات الموسم (سبتمبر 2025 - أوت 2026)</h2>
+                        <p>إحصاء دقيق للمحتوى العلمي للنادي مع التمييز بين <strong>المجالس العلمية والدورات</strong> وبين <strong>المناقشات العلمية</strong>، وحصر رصيد المواد غير الممنتجة. <em>(اضغطي على أي بطاقة للانتقال لواجهة التفاصيل المستقلة)</em>.</p>
+                    </div>
+                    <div class="panorama-actions">
+                        <span class="season-pill"><i class="fa-brands fa-youtube"></i> متصل بـ YouTube API & Telegram</span>
                     </div>
                 </div>
 
-                <div class="pano-card pano-in-montage clickable-card" id="btnPanoInMontage" title="انقري لعرض المجالس قيد المونتاج حالياً">
-                    <div class="pano-icon"><i class="fa-solid fa-clapperboard"></i></div>
-                    <div class="pano-data">
-                        <span class="pano-label">قيد المونتاج والتجهيز حالياً</span>
-                        <h3 class="pano-value">8 <span class="pano-unit">مجالس ومناقشات</span></h3>
-                        <span class="pano-subtext">🟡 5 مجالس علمية • 3 مناقشات ماستر <i class="fa-solid fa-arrow-up-right-from-square click-hint"></i></span>
+                <!-- Panorama KPI Interactive Cards Grid (النقر ينقل للشاشة الثانية) -->
+                <div class="panorama-kpi-grid">
+                    <div class="pano-card pano-published clickable-card" id="btnPanoPublished" title="انقري للانتقال إلى واجهة المجالس المنشورة بيوتيوب">
+                        <div class="pano-icon"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="pano-data">
+                            <span class="pano-label">المجالس والمناقشات المنشورة (يوتيوب)</span>
+                            <h3 class="pano-value">144 <span class="pano-unit">مجلساً ومناقشة</span></h3>
+                            <span class="pano-subtext">🟢 102 مجلساً علمياً • 42 مناقشة علمية <i class="fa-solid fa-arrow-left click-hint"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="pano-card pano-in-montage clickable-card" id="btnPanoInMontage" title="انقري للانتقال إلى واجهة المجالس قيد المونتاج">
+                        <div class="pano-icon"><i class="fa-solid fa-clapperboard"></i></div>
+                        <div class="pano-data">
+                            <span class="pano-label">قيد المونتاج والتجهيز حالياً</span>
+                            <h3 class="pano-value">8 <span class="pano-unit">مجالس ومناقشات</span></h3>
+                            <span class="pano-subtext">🟡 5 مجالس علمية • 3 مناقشات ماستر <i class="fa-solid fa-arrow-left click-hint"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="pano-card pano-unmontaged clickable-card" id="btnPanoUnmontaged" title="انقري للانتقال إلى واجهة الـ 100 مادة غير الممنتجة">
+                        <div class="pano-icon"><i class="fa-solid fa-box-archive"></i></div>
+                        <div class="pano-data">
+                            <span class="pano-label">رصيد المواد غير الممنتجة (تنتظر المونتاج)</span>
+                            <h3 class="pano-value">~100 <span class="pano-unit">مادة ومجلس تراكمي</span></h3>
+                            <span class="pano-subtext">⏳ مواد خام وتسجيلات بحاجة لجدولة المونتاج <i class="fa-solid fa-arrow-left click-hint"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="pano-card pano-views clickable-card" id="btnPanoViews" title="انقري للتمرير إلى قسم إحصائيات ونمو القناة">
+                        <div class="pano-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <div class="pano-data">
+                            <span class="pano-label">إجمالي المشاهدات المحققة للموسم</span>
+                            <h3 class="pano-value">62,476 <span class="pano-unit">مشاهدة حقيقية</span></h3>
+                            <span class="pano-subtext">👀 عبر 144 فيديو منشور بالقناة <i class="fa-solid fa-arrow-down click-hint"></i></span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="pano-card pano-unmontaged clickable-card" id="btnPanoUnmontaged" title="انقري لعرض قائمة الـ 100 مادة غير الممنتجة">
-                    <div class="pano-icon"><i class="fa-solid fa-box-archive"></i></div>
-                    <div class="pano-data">
-                        <span class="pano-label">رصيد المواد غير الممنتجة (تنتظر المونتاج)</span>
-                        <h3 class="pano-value">~100 <span class="pano-unit">مادة ومجلس تراكمي</span></h3>
-                        <span class="pano-subtext">⏳ مواد خام وتسجيلات بحاجة لجدولة المونتاج <i class="fa-solid fa-arrow-up-right-from-square click-hint"></i></span>
+                <!-- Dual Category Breakdown: المجالس العلمية VS المناقشات العلمية -->
+                <div class="category-breakdown-box">
+                    <div class="cat-col clickable-col" id="btnFilterCouncilsOnly">
+                        <div class="cat-header">
+                            <i class="fa-solid fa-book-open-reader"></i>
+                            <h4>📚 المجالس العلمية والدورات التأصيلية (فتح التفاصيل)</h4>
+                        </div>
+                        <div class="cat-stats-row">
+                            <div class="cat-stat-chip"><strong>102</strong> منشور بيوتيوب</div>
+                            <div class="cat-stat-chip in-progress-chip"><strong>5</strong> قيد المونتاج الفعلي</div>
+                            <div class="cat-stat-chip pending-chip"><strong>~65</strong> مادة بانتظار المونتاج</div>
+                        </div>
+                        <p class="cat-desc">شرح القول الفصل (20)، شرح البيقونية (14)، التفكير النقدي (12)، التزكية (12)، بناء الطالب الرسالي (25)، الموقف وعلم الكلام (10)، وغيرها.</p>
+                    </div>
+
+                    <div class="cat-col clickable-col" id="btnFilterDiscussionsOnly">
+                        <div class="cat-header">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <h4>🎓 المناقشات العلمية: ماستر ودكتوراه (فتح التفاصيل)</h4>
+                        </div>
+                        <div class="cat-stats-row">
+                            <div class="cat-stat-chip"><strong>42</strong> منشورة بيوتيوب</div>
+                            <div class="cat-stat-chip in-progress-chip"><strong>3</strong> قيد المونتاج الفعلي</div>
+                            <div class="cat-stat-chip pending-chip"><strong>~35</strong> مناقشة بانتظار المونتاج</div>
+                        </div>
+                        <p class="cat-desc">مناقشات رسائل الماستر، أطروحات الدكتوراه، الندوات الأكاديمية التخصصية، وجلسات النقد العلمي والفكري.</p>
                     </div>
                 </div>
 
-                <div class="pano-card pano-views clickable-card" id="btnPanoViews" title="انقري للانتقال إلى رسوم إحصائيات المشاهدات">
-                    <div class="pano-icon"><i class="fa-solid fa-chart-line"></i></div>
-                    <div class="pano-data">
-                        <span class="pano-label">إجمالي المشاهدات المحققة للموسم</span>
-                        <h3 class="pano-value">62,476 <span class="pano-unit">مشاهدة حقيقية</span></h3>
-                        <span class="pano-subtext">👀 عبر 144 فيديو منشور بالقناة <i class="fa-solid fa-arrow-down click-hint"></i></span>
+                <!-- Panorama Pipeline Visual Tracker -->
+                <div class="panorama-progress-box">
+                    <div class="progress-bar-header">
+                        <span class="progress-title"><i class="fa-solid fa-bars-progress"></i> المؤشر التراكمي الشامل لإنتاج المحتوى العلمي للنادي:</span>
+                        <span class="progress-stats-summary"><strong>144</strong> منشور (57%) • <strong>8</strong> قيد المونتاج (3%) • <strong>~100</strong> بانتظار المونتاج (40%)</span>
+                    </div>
+                    <div class="multi-progress-track">
+                        <div class="multi-progress-seg seg-published" style="width: 57%;" title="المنشور: 57%"></div>
+                        <div class="multi-progress-seg seg-montage" style="width: 3%;" title="قيد المونتاج: 3%"></div>
+                        <div class="multi-progress-seg seg-pending" style="width: 40%;" title="بانتظار المونتاج: 40%"></div>
+                    </div>
+                    <div class="progress-legend">
+                        <span class="legend-item"><span class="legend-dot dot-published"></span> تم النشر رسمياً على يوتيوب (144)</span>
+                        <span class="legend-item"><span class="legend-dot dot-montage"></span> قيد المونتاج الفعلي حالياً (8)</span>
+                        <span class="legend-item"><span class="legend-dot dot-pending"></span> مواد خام وتسجيلات بانتظار المونتاج (~100)</span>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Dual Category Breakdown: المجالس العلمية VS المناقشات العلمية -->
-            <div class="category-breakdown-box">
-                <div class="cat-col clickable-col" id="btnFilterCouncilsOnly">
-                    <div class="cat-header">
-                        <i class="fa-solid fa-book-open-reader"></i>
-                        <h4>📚 المجالس العلمية والدورات التأصيلية (فتح التفاصيل)</h4>
+            <!-- 2. الشريط الثاني: شريط وخطة مهام الشهر المباشرة لأعضاء الفريق -->
+            <section class="active-month-banner">
+                <div class="banner-info">
+                    <span class="banner-badge"><i class="fa-solid fa-calendar-check"></i> الخطة الشهرية النشطة لفريق الإعلام</span>
+                    <h2 id="activeMonthTitle">خطة شهر أوت 2026: جدول مناقشات الماستر والمجالس العلمية</h2>
+                    <p id="activeMonthDesc">جدول المهام المباشر لأعضاء الفريق: متابعة التفريغ والمراجعة، تصميم البوسترات، المونتاج، والنشر الحقيقي.</p>
+                </div>
+                <div class="banner-stats">
+                    <div class="stat-mini">
+                        <span class="stat-mini-label">إجمالي المهام</span>
+                        <strong class="stat-mini-value" id="bannerTotalTasks">34 مجلس</strong>
                     </div>
-                    <div class="cat-stats-row">
-                        <div class="cat-stat-chip"><strong>102</strong> منشور بيوتيوب</div>
-                        <div class="cat-stat-chip in-progress-chip"><strong>5</strong> قيد المونتاج الفعلي</div>
-                        <div class="cat-stat-chip pending-chip"><strong>~65</strong> مادة بانتظار المونتاج</div>
-                    </div>
-                    <p class="cat-desc">شرح القول الفصل (20)، شرح البيقونية (14)، التفكير النقدي (12)، التزكية (12)، بناء الطالب الرسالي (25)، الموقف وعلم الكلام (10)، وغيرها.</p>
-                </div>
-
-                <div class="cat-col clickable-col" id="btnFilterDiscussionsOnly">
-                    <div class="cat-header">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        <h4>🎓 المناقشات العلمية: ماستر ودكتوراه (فتح التفاصيل)</h4>
-                    </div>
-                    <div class="cat-stats-row">
-                        <div class="cat-stat-chip"><strong>42</strong> منشورة بيوتيوب</div>
-                        <div class="cat-stat-chip in-progress-chip"><strong>3</strong> قيد المونتاج الفعلي</div>
-                        <div class="cat-stat-chip pending-chip"><strong>~35</strong> مناقشة بانتظار المونتاج</div>
-                    </div>
-                    <p class="cat-desc">مناقشات رسائل الماستر، أطروحات الدكتوراه، الندوات الأكاديمية التخصصية، وجلسات النقد العلمي والفكري.</p>
-                </div>
-            </div>
-
-            <!-- Panorama Pipeline Visual Tracker -->
-            <div class="panorama-progress-box">
-                <div class="progress-bar-header">
-                    <span class="progress-title"><i class="fa-solid fa-bars-progress"></i> المؤشر التراكمي الشامل لإنتاج المحتوى العلمي للنادي:</span>
-                    <span class="progress-stats-summary"><strong>144</strong> منشور (57%) • <strong>8</strong> قيد المونتاج (3%) • <strong>~100</strong> بانتظار المونتاج (40%)</span>
-                </div>
-                <div class="multi-progress-track">
-                    <div class="multi-progress-seg seg-published" style="width: 57%;" title="المنشور: 57%"></div>
-                    <div class="multi-progress-seg seg-montage" style="width: 3%;" title="قيد المونتاج: 3%"></div>
-                    <div class="multi-progress-seg seg-pending" style="width: 40%;" title="بانتظار المونتاج: 40%"></div>
-                </div>
-                <div class="progress-legend">
-                    <span class="legend-item"><span class="legend-dot dot-published"></span> تم النشر رسمياً على يوتيوب (144)</span>
-                    <span class="legend-item"><span class="legend-dot dot-montage"></span> قيد المونتاج الفعلي حالياً (8)</span>
-                    <span class="legend-item"><span class="legend-dot dot-pending"></span> مواد خام وتسجيلات بانتظار المونتاج (~100)</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Active Month Banner -->
-        <section class="active-month-banner">
-            <div class="banner-info">
-                <span class="banner-badge"><i class="fa-solid fa-calendar-check"></i> الخطة الشهرية النشطة لفريق الإعلام</span>
-                <h2 id="activeMonthTitle">خطة شهر أوت 2026: جدول مناقشات الماستر والمجالس العلمية</h2>
-                <p id="activeMonthDesc">جدول المهام المباشر لأعضاء الفريق: التفريغ والمراجعة، تصميم البوسترات، المونتاج، والمتابعة الحية.</p>
-            </div>
-            <div class="banner-stats">
-                <div class="stat-mini">
-                    <span class="stat-mini-label">إجمالي المهام</span>
-                    <strong class="stat-mini-value" id="bannerTotalTasks">34 مجلس</strong>
-                </div>
-                <div class="stat-mini">
-                    <span class="stat-mini-label">حالة الشهر</span>
-                    <strong class="stat-mini-value status-active" id="bannerMonthStatus">نشط ومحدث لحظياً</strong>
-                </div>
-            </div>
-        </section>
-
-        <!-- 1. Top KPI Summary Cards (Monthly) -->
-        <section class="kpi-section" aria-label="الإحصائيات العامة للشهر">
-            <div class="kpi-card" id="kpiProgressCard">
-                <div class="kpi-icon progress-icon">
-                    <i class="fa-solid fa-chart-pie"></i>
-                </div>
-                <div class="kpi-data">
-                    <span class="kpi-label">نسبة الإنجاز الشهرية</span>
-                    <h3 class="kpi-value" id="kpiProgress">0%</h3>
-                    <div class="progress-track">
-                        <div class="progress-bar" id="kpiProgressBar" style="width: 0%;"></div>
+                    <div class="stat-mini">
+                        <span class="stat-mini-label">حالة الشهر</span>
+                        <strong class="stat-mini-value status-active" id="bannerMonthStatus">نشط ومحدث لحظياً</strong>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="kpi-card">
-                <div class="kpi-icon councils-icon">
-                    <i class="fa-solid fa-book-open"></i>
-                </div>
-                <div class="kpi-data">
-                    <span class="kpi-label">المجالس المبرمجة بالشهر</span>
-                    <h3 class="kpi-value" id="kpiTotalCouncils">34</h3>
-                    <span class="kpi-hint"><span id="kpiDoneCount">0</span> منجز • <span id="kpiPendingCount">34</span> متبقي</span>
-                </div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-icon youtube-icon">
-                    <i class="fa-brands fa-youtube"></i>
-                </div>
-                <div class="kpi-data">
-                    <span class="kpi-label">استوديو يوتيوب للشهر</span>
-                    <h3 class="kpi-value" id="kpiYoutubeViews">0</h3>
-                    <span class="kpi-hint"><span id="kpiPublishedYt">0</span> مجلساً منشوراً • المشاهدات</span>
-                </div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-icon blockers-icon">
-                    <i class="fa-solid fa-headset"></i>
-                </div>
-                <div class="kpi-data">
-                    <span class="kpi-label">صندوق الاستشكالات</span>
-                    <h3 class="kpi-value" id="kpiBlockersCount">0</h3>
-                    <span class="kpi-hint">استشكالات معلقة بحاجة لحل</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. Controls & Week Filters with Category Filter -->
-        <section class="controls-section">
-            <div class="tabs-wrapper" role="tablist">
-                <button class="tab-btn active" data-week="all"><i class="fa-solid fa-calendar-days"></i> كل الأسابيع</button>
-                <button class="tab-btn" data-week="1">الأسبوع الأول (1 - 7 أوت)</button>
-                <button class="tab-btn" data-week="2">الأسبوع الثاني (8 - 14 أوت)</button>
-                <button class="tab-btn" data-week="3">الأسبوع الثالث (15 - 21 أوت) <span class="current-badge">الحالي</span></button>
-                <button class="tab-btn" data-week="4">الأسبوع الرابع (22 - 28 أوت)</button>
-            </div>
-
-            <div class="filter-wrapper">
-                <div class="select-box">
-                    <select id="categoryFilter">
-                        <option value="all">كل الأنواع (مجالس + مناقشات)</option>
-                        <option value="council">📚 المجالس العلمية والدورات</option>
-                        <option value="discussion">🎓 المناقشات العلمية (ماستر/دكتوراه)</option>
-                    </select>
+            <!-- KPI Summary Cards (Monthly) -->
+            <section class="kpi-section" aria-label="الإحصائيات العامة للشهر">
+                <div class="kpi-card" id="kpiProgressCard">
+                    <div class="kpi-icon progress-icon">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <div class="kpi-data">
+                        <span class="kpi-label">نسبة الإنجاز الشهرية</span>
+                        <h3 class="kpi-value" id="kpiProgress">0%</h3>
+                        <div class="progress-track">
+                            <div class="progress-bar" id="kpiProgressBar" style="width: 0%;"></div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" placeholder="بحث باسم المجلس أو الموضوع...">
+                <div class="kpi-card">
+                    <div class="kpi-icon councils-icon">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div class="kpi-data">
+                        <span class="kpi-label">المجالس المبرمجة بالشهر</span>
+                        <h3 class="kpi-value" id="kpiTotalCouncils">34</h3>
+                        <span class="kpi-hint"><span id="kpiDoneCount">0</span> منجز • <span id="kpiPendingCount">34</span> متبقي</span>
+                    </div>
                 </div>
 
-                <div class="select-box">
-                    <select id="memberFilter">
-                        <option value="all">كل أعضاء الفريق</option>
-                        <option value="مريم">مريم (أمينة الإعلام)</option>
-                        <option value="أ. أشواق">أ. أشواق</option>
-                        <option value="نعمة">نعمة</option>
-                        <option value="هديل">هديل</option>
-                        <option value="خولة">خولة</option>
-                        <option value="معاذ">معاذ</option>
-                        <option value="نور">نور</option>
-                        <option value="خديجة">خديجة</option>
-                    </select>
+                <div class="kpi-card">
+                    <div class="kpi-icon youtube-icon">
+                        <i class="fa-brands fa-youtube"></i>
+                    </div>
+                    <div class="kpi-data">
+                        <span class="kpi-label">استوديو يوتيوب للشهر</span>
+                        <h3 class="kpi-value" id="kpiYoutubeViews">0</h3>
+                        <span class="kpi-hint"><span id="kpiPublishedYt">0</span> مجلساً منشوراً • المشاهدات</span>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- 3. Production Tasks Pipeline (خطة مهام الشهر المباشرة لأعضاء الفريق) -->
-        <section class="pipeline-section">
-            <div class="section-header">
-                <div>
-                    <h2><i class="fa-solid fa-list-check"></i> جدول خطة الإنتاج وتتبع المجالس والمناقشات (شهر أوت)</h2>
-                    <p class="section-desc">يمكن لكل عضو في الفريق تعليم خانة الإنجاز (تفريغ، تصميم، مونتاج) مباشرة ليتم تحديثها سحابياً ولدى الجميع فورياً.</p>
+                <div class="kpi-card">
+                    <div class="kpi-icon blockers-icon">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div class="kpi-data">
+                        <span class="kpi-label">صندوق الاستشكالات</span>
+                        <h3 class="kpi-value" id="kpiBlockersCount">0</h3>
+                        <span class="kpi-hint">استشكالات معلقة بحاجة لحل</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls & Week Filters -->
+            <section class="controls-section">
+                <div class="tabs-wrapper" role="tablist">
+                    <button class="tab-btn active" data-week="all"><i class="fa-solid fa-calendar-days"></i> كل الأسابيع</button>
+                    <button class="tab-btn" data-week="1">الأسبوع الأول (1 - 7 أوت)</button>
+                    <button class="tab-btn" data-week="2">الأسبوع الثاني (8 - 14 أوت)</button>
+                    <button class="tab-btn" data-week="3">الأسبوع الثالث (15 - 21 أوت) <span class="current-badge">الحالي</span></button>
+                    <button class="tab-btn" data-week="4">الأسبوع الرابع (22 - 28 أوت)</button>
+                </div>
+
+                <div class="filter-wrapper">
+                    <div class="select-box">
+                        <select id="categoryFilter">
+                            <option value="all">كل الأنواع (مجالس + مناقشات)</option>
+                            <option value="council">📚 المجالس العلمية والدورات</option>
+                            <option value="discussion">🎓 المناقشات العلمية (ماستر/دكتوراه)</option>
+                        </select>
+                    </div>
+
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" placeholder="بحث باسم المجلس أو الموضوع...">
+                    </div>
+
+                    <div class="select-box">
+                        <select id="memberFilter">
+                            <option value="all">كل أعضاء الفريق</option>
+                            <option value="مريم">مريم (أمينة الإعلام)</option>
+                            <option value="أ. أشواق">أ. أشواق</option>
+                            <option value="نعمة">نعمة</option>
+                            <option value="هديل">هديل</option>
+                            <option value="خولة">خولة</option>
+                            <option value="معاذ">معاذ</option>
+                            <option value="نور">نور</option>
+                            <option value="خديجة">خديجة</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Production Tasks Pipeline (جدول المهام المباشر) -->
+            <section class="pipeline-section">
+                <div class="section-header">
+                    <div>
+                        <h2><i class="fa-solid fa-list-check"></i> جدول خطة الإنتاج وتتبع المجالس والمناقشات (شهر أوت)</h2>
+                        <p class="section-desc">يمكن لكل عضو في الفريق تعليم خانة الإنجاز (تفريغ، تصميم، مونتاج) مباشرة ليتم تحديثها سحابياً ولدى الجميع فورياً.</p>
+                    </div>
+                    <div class="view-switch">
+                        <button class="view-btn active" id="btnGridView" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
+                        <button class="view-btn" id="btnTableView" title="عرض الجدول"><i class="fa-solid fa-table-list"></i></button>
+                    </div>
+                </div>
+
+                <!-- Cards Container -->
+                <div class="councils-grid" id="councilsContainer">
+                    <!-- Dynamically populated via app.js -->
+                </div>
+
+                <!-- Table Container (Initially Hidden) -->
+                <div class="councils-table-wrapper" id="councilsTableContainer" style="display: none;">
+                    <table class="councils-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>المجلس / المناقشة والموضوع</th>
+                                <th>النوع</th>
+                                <th>الأسبوع / اليوم</th>
+                                <th>المسؤول</th>
+                                <th>التفريغ</th>
+                                <th>التصميم</th>
+                                <th>المونتاج</th>
+                                <th>حالة يوتيوب</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="councilsTableBody">
+                            <!-- Dynamically populated via app.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- YouTube Analytics & Studio Growth -->
+            <section class="analytics-section" id="analyticsSection">
+                <div class="section-header">
+                    <div>
+                        <h2><i class="fa-brands fa-youtube"></i> إحصائيات استوديو يوتيوب ونمو القناة</h2>
+                        <p class="section-desc">مواكبة نسب المشاهدات الفعلية، نمو التفاعل، والمجالس الأكثر مشاهدة لتحسين الجدولة وصناعة المحتوى.</p>
+                    </div>
+                    <button class="btn-secondary" id="btnRefreshYtAnalytics">
+                        <i class="fa-solid fa-arrows-rotate"></i> تحديث الإحصائيات الحية
+                    </button>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-chart-line"></i> نمو المشاهدات الأسبوعية للمجالس</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="viewsTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-ranking-star"></i> المجالس الأكثر مشاهدة وتفاعلاً</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="topCouncilsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blockers & Assistance Inbox -->
+            <section class="blockers-section">
+                <div class="section-header">
+                    <div>
+                        <h2><i class="fa-solid fa-inbox"></i> صندوق الاستشكالات وطلبات مساعدة الفريق</h2>
+                        <p class="section-desc">الاستشكالات والتحديات المرفوعة من أعضاء الفريق لحلها فورياً وضمان عدم تأخر المواعيد.</p>
+                    </div>
+                </div>
+
+                <div class="blockers-list" id="blockersList">
+                    <!-- Dynamically populated via app.js -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- =========================================================================
+         SCREEN 2: واجهة التفاصيل المستقلة (Dedicated Sub-View Screen)
+         ========================================================================= -->
+    <div id="seasonalDetailsView" class="view-screen" style="display: none;">
+        <main class="main-content">
+
+            <!-- Sub-View Navigation Bar (شريط الترويسة وزر الرجوع البارز) -->
+            <section class="subview-nav-header">
+                <div class="subview-nav-left">
+                    <button class="btn-back-main" id="btnBackToMain">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span>الرجوع إلى الواجهة الأساسية</span>
+                    </button>
+                    <div class="breadcrumb-trail">
+                        <span>الرئيسية</span>
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <span>أرشيف وسجل الموسم</span>
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <strong id="subviewBreadcrumbCurrent" class="breadcrumb-active">المجالس المنشورة</strong>
+                    </div>
+                </div>
+                <div class="subview-nav-right">
+                    <span class="subview-counter-badge" id="subviewItemsCount">عرض 144 مجلساً ومناقشة</span>
+                </div>
+            </section>
+
+            <!-- Sub-View Hero Card (بطاقة تعريفية بالقسم المختار) -->
+            <section class="subview-hero-card">
+                <div class="subview-hero-text">
+                    <h2 id="subviewTitle">🟢 المجالس والمناقشات المنشورة على يوتيوب (الموسم 2025 - 2026)</h2>
+                    <p id="subviewSubtitle">سجل أكاديمي مفصل بكافة المجالس والمناقشات مع أرقام المجالس، أسماء الأساتذة والباحثين، وروابط المشاهدة الرسمية.</p>
                 </div>
                 <div class="view-switch">
-                    <button class="view-btn active" id="btnGridView" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
-                    <button class="view-btn" id="btnTableView" title="عرض الجدول"><i class="fa-solid fa-table-list"></i></button>
+                    <button class="view-btn active" id="btnSubTable" title="عرض الجدول الأكاديمي"><i class="fa-solid fa-table-list"></i> جدول أكاديمي</button>
+                    <button class="view-btn" id="btnSubGrid" title="عرض البطاقات"><i class="fa-solid fa-grip"></i> بطاقات</button>
                 </div>
-            </div>
+            </section>
 
-            <!-- Cards Container -->
-            <div class="councils-grid" id="councilsContainer">
-                <!-- Dynamically populated via app.js -->
-            </div>
-
-            <!-- Table Container (Initially Hidden) -->
-            <div class="councils-table-wrapper" id="councilsTableContainer" style="display: none;">
-                <table class="councils-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>المجلس / المناقشة والموضوع</th>
-                            <th>النوع</th>
-                            <th>الأسبوع / اليوم</th>
-                            <th>المسؤول</th>
-                            <th>التفريغ</th>
-                            <th>التصميم</th>
-                            <th>المونتاج</th>
-                            <th>حالة يوتيوب</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="councilsTableBody">
-                        <!-- Dynamically populated via app.js -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- 4. YouTube Analytics & Studio Growth -->
-        <section class="analytics-section" id="analyticsSection">
-            <div class="section-header">
-                <div>
-                    <h2><i class="fa-brands fa-youtube"></i> إحصائيات استوديو يوتيوب ونمو القناة</h2>
-                    <p class="section-desc">مواكبة نسب المشاهدات الفعلية، نمو التفاعل، والمجالس الأكثر مشاهدة لتحسين الجدولة وصناعة المحتوى.</p>
-                </div>
-                <button class="btn-secondary" id="btnRefreshYtAnalytics">
-                    <i class="fa-solid fa-arrows-rotate"></i> تحديث الإحصائيات الحية
-                </button>
-            </div>
-
-            <div class="analytics-grid">
-                <div class="chart-card">
-                    <h3><i class="fa-solid fa-chart-line"></i> نمو المشاهدات الأسبوعية للمجالس</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="viewsTrendChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <h3><i class="fa-solid fa-ranking-star"></i> المجالس الأكثر مشاهدة وتفاعلاً</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="topCouncilsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. Blockers & Assistance Inbox -->
-        <section class="blockers-section">
-            <div class="section-header">
-                <div>
-                    <h2><i class="fa-solid fa-inbox"></i> صندوق الاستشكالات وطلبات مساعدة الفريق</h2>
-                    <p class="section-desc">الاستشكالات والتحديات المرفوعة من أعضاء الفريق لحلها فورياً وضمان عدم تأخر المواعيد.</p>
-                </div>
-            </div>
-
-            <div class="blockers-list" id="blockersList">
-                <!-- Dynamically populated via app.js -->
-            </div>
-        </section>
-
-    </main>
-
-    <!-- 🌟 DEDICATED MODAL: نافذة تفاصيل مجالس ومناقشات الموسم المنبثقة 🌟 -->
-    <div class="modal-overlay" id="inventoryDetailModal">
-        <div class="modal-dialog modal-dialog-wide">
-            <div class="modal-header">
-                <div class="modal-title-wrap">
-                    <h3 id="invModalTitle"><i class="fa-solid fa-layer-group"></i> تفاصيل وسجل مجالس ومناقشات الموسم</h3>
-                    <p class="modal-subtitle" id="invModalSubtitle">عرض تفصيلي لكل مجلس ومناقشة بالأسماء، الأرقام، والروابط المباشرة</p>
-                </div>
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div class="view-switch" style="background: rgba(0,0,0,0.05);">
-                        <button class="view-btn active" id="btnModalGrid" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
-                        <button class="view-btn" id="btnModalTable" title="عرض الجدول"><i class="fa-solid fa-table"></i></button>
-                    </div>
-                    <button class="btn-close" id="btnCloseInvModal"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-            </div>
-
-            <!-- Modal Filters Toolbar -->
-            <div class="modal-filter-toolbar">
-                <div class="modal-chips-wrapper">
-                    <button class="exp-chip active" data-filter="all">الكل (221)</button>
-                    <button class="exp-chip chip-published" data-filter="PUBLISHED">🟢 المنشورة بيوتيوب (144)</button>
-                    <button class="exp-chip chip-montage" data-filter="IN_MONTAGE">🟡 قيد المونتاج (8)</button>
-                    <button class="exp-chip chip-unmontaged" data-filter="UNMONTAGED">🔴 بانتظار المونتاج (~100)</button>
-                    <button class="exp-chip chip-councils" data-filter="council">📚 المجالس العلمية</button>
-                    <button class="exp-chip chip-discussions" data-filter="discussion">🎓 المناقشات العلمية</button>
+            <!-- Sub-View Filter & Search Bar -->
+            <section class="subview-controls-bar">
+                <div class="subview-chips-list">
+                    <button class="exp-chip active" data-subfilter="all">الكل (221)</button>
+                    <button class="exp-chip chip-published" data-subfilter="PUBLISHED">🟢 المنشورة بيوتيوب (144)</button>
+                    <button class="exp-chip chip-montage" data-subfilter="IN_MONTAGE">🟡 قيد المونتاج (8)</button>
+                    <button class="exp-chip chip-unmontaged" data-subfilter="UNMONTAGED">🔴 بانتظار المونتاج (~100)</button>
+                    <button class="exp-chip chip-councils" data-subfilter="council">📚 المجالس العلمية</button>
+                    <button class="exp-chip chip-discussions" data-subfilter="discussion">🎓 المناقشات العلمية</button>
                 </div>
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="modalSearchInput" placeholder="بحث سريع باسم السلسلة أو رقم المجلس...">
+                    <input type="text" id="subviewSearchInput" placeholder="بحث باسم السلسلة أو رقم المجلس أو الأستاذ...">
                 </div>
-            </div>
+            </section>
 
-            <!-- Modal Body (Scrollable Cards/Table) -->
-            <div class="modal-body-scroll">
-                <div class="councils-grid" id="modalCardsGrid">
-                    <!-- Populated via JS -->
-                </div>
-                <div class="councils-table-wrapper" id="modalTableContainer" style="display: none;">
-                    <table class="councils-table">
+            <!-- Academic Table View (طريقة العرض الافتراضية الأكاديمية) -->
+            <section class="subview-content-section">
+                <div class="councils-table-wrapper" id="subviewTableContainer">
+                    <table class="councils-table academic-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -427,18 +445,27 @@
                                 <th>المشاهدات / يوتيوب</th>
                             </tr>
                         </thead>
-                        <tbody id="modalTableBody">
-                            <!-- Populated via JS -->
+                        <tbody id="subviewTableBody">
+                            <!-- Populated dynamically via app.js -->
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Grid View (Initially Hidden) -->
+                <div class="councils-grid" id="subviewGridContainer" style="display: none;">
+                    <!-- Populated dynamically via app.js -->
+                </div>
+            </section>
+
+            <!-- Subview Bottom Return Button -->
+            <div class="subview-bottom-bar">
+                <button class="btn-primary" id="btnBackToMainBottom">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>الرجوع إلى الواجهة الأساسية وجدول مهام الشهر</span>
+                </button>
             </div>
 
-            <div class="modal-footer">
-                <span class="footer-count" id="modalFilteredCount">عرض 221 عنصراً</span>
-                <button type="button" class="btn-primary" id="btnCloseInvModalBottom">إغلاق النافذة</button>
-            </div>
-        </div>
+        </main>
     </div>
 
     <!-- Blocker Modal -->
@@ -491,7 +518,7 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer (مشترك في كل الواجهات) -->
     <footer class="app-footer">
         <div class="footer-content">
             <img src="logo.png" alt="شعار جسور" class="footer-logo">
