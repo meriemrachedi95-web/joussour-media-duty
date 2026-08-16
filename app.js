@@ -246,20 +246,23 @@ function renderGridView(councils) {
 
     councils.forEach(c => {
         const card = document.createElement('div');
-        card.className = 'council-card';
+        card.className = `council-card ${c.isExtra ? 'extra-council' : ''}`;
         const isYtPublished = c.tasks && c.tasks.youtube;
-        const ytViewsText = isYtPublished ? `<span style="color: var(--brand-gold); font-weight: 800;"><i class="fa-solid fa-eye"></i> ${c.ytViews.toLocaleString('ar-DZ')} مشاهدة</span>` : '';
+        const ytViewsText = isYtPublished ? `<span style="color: var(--brand-gold); font-weight: 800;"><i class="fa-solid fa-eye"></i> ${(c.ytViews||0).toLocaleString('ar-DZ')} مشاهدة</span>` : '';
         const videoBtn = c.videoUrl ? `<a href="${c.videoUrl}" target="_blank" class="btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; text-decoration: none; color: var(--danger);"><i class="fa-brands fa-youtube"></i> فتح الفيديو</a>` : '';
+
+        const extraBadge = c.isExtra ? `<span class="task-badge" style="background: var(--brand-gold-light); color: var(--brand-gold); border: 1px solid var(--brand-gold); font-weight: 800;">✨ منشور إضافي من القناة</span>` : '';
 
         card.innerHTML = `
             <div class="council-header">
-                <span class="council-meta">الأسبوع ${c.week} • ${c.day} (${c.date})</span>
+                <span class="council-meta">${c.isExtra ? 'نشر حديث • ' : 'الأسبوع ' + c.week + ' • '}${c.day} (${c.date})</span>
                 <span class="task-badge ${isYtPublished ? 'done' : (c.tasks && c.tasks.montage ? 'in-progress' : 'pending')}">
                     ${isYtPublished ? '🟢 تم النشر بيوتيوب' : (c.tasks && c.tasks.montage ? 'جاهز للنشر' : 'قيد الإنتاج')}
                 </span>
             </div>
             <div>
-                <h3 class="council-title">${c.title}</h3>
+                ${extraBadge}
+                <h3 class="council-title" style="margin-top: 0.3rem;">${c.title}</h3>
                 <div class="council-assignee"><i class="fa-solid fa-user-circle"></i> المسؤول: <strong>${c.assignee}</strong></div>
             </div>
 
@@ -307,8 +310,8 @@ function renderTableView(councils) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><strong>#${c.id}</strong></td>
-            <td><strong>${c.title}</strong> ${c.videoUrl ? `<a href="${c.videoUrl}" target="_blank" style="color: var(--danger); font-size: 0.8rem; margin-right: 0.3rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}</td>
-            <td>الأسبوع ${c.week} • ${c.day} <br><small class="text-muted">${c.date}</small></td>
+            <td><strong>${c.title}</strong> ${c.isExtra ? '<span class="task-badge" style="background:var(--brand-gold-light);color:var(--brand-gold);font-size:0.7rem;">إضافي</span>' : ''} ${c.videoUrl ? `<a href="${c.videoUrl}" target="_blank" style="color: var(--danger); font-size: 0.8rem; margin-right: 0.3rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}</td>
+            <td>${c.isExtra ? 'نشر إضافي' : 'الأسبوع ' + c.week} • ${c.day} <br><small class="text-muted">${c.date}</small></td>
             <td><span class="task-badge" style="background: var(--bg-subtle);">${c.assignee}</span></td>
             <td><input type="checkbox" ${c.tasks && c.tasks.transcription ? 'checked' : ''} onchange="toggleTask(${c.id}, 'transcription', this.checked)"></td>
             <td><input type="checkbox" ${c.tasks && c.tasks.design ? 'checked' : ''} onchange="toggleTask(${c.id}, 'design', this.checked)"></td>
@@ -380,7 +383,6 @@ function initCharts() {
     if (viewsChart) viewsChart.destroy();
     if (topCouncilsChart) topCouncilsChart.destroy();
 
-    // حساب المشاهدات الحقيقية لكل أسبوع
     let w1Views = 0, w2Views = 0, w3Views = 0, w4Views = 0;
     const publishedList = [];
 
