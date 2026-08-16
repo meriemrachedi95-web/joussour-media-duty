@@ -328,6 +328,46 @@ body {
     white-space: nowrap;
 }
 
+/* Clickable Interactive Cards */
+.clickable-card {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+}
+
+.clickable-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(217, 140, 24, 0.3);
+    border-color: var(--brand-gold) !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+}
+
+.clickable-card:active {
+    transform: translateY(-1px);
+}
+
+.click-hint {
+    margin-right: 0.3rem;
+    color: var(--brand-gold);
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+
+.clickable-card:hover .click-hint {
+    transform: translateY(3px);
+}
+
+.clickable-col {
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.clickable-col:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: var(--brand-gold) !important;
+    transform: translateY(-2px);
+}
+
 /* Panorama Cards Grid */
 .panorama-kpi-grid {
     display: grid;
@@ -346,12 +386,6 @@ body {
     gap: 1.1rem;
     transition: var(--transition-fast);
     backdrop-filter: blur(8px);
-}
-
-.pano-card:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-    border-color: var(--brand-gold);
 }
 
 .pano-icon {
@@ -534,6 +568,64 @@ body {
 .dot-published { background: #10b981; }
 .dot-montage { background: #f59e0b; }
 .dot-pending { background: #ef4444; }
+
+/* ==========================================================================
+   🔍 SEASONAL INVENTORY EXPLORER
+   ========================================================================== */
+.seasonal-explorer-section {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-gold);
+    padding: 1.75rem 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.explorer-controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    background: var(--bg-subtle);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.explorer-chips-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.exp-chip {
+    background: #ffffff;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.exp-chip:hover {
+    border-color: var(--brand-gold);
+    transform: translateY(-1px);
+}
+
+.exp-chip.active {
+    background: var(--brand-navy);
+    color: white;
+    border-color: transparent;
+}
+
+.exp-chip.chip-published.active { background: #10b981; }
+.exp-chip.chip-montage.active { background: #f59e0b; }
+.exp-chip.chip-unmontaged.active { background: #ef4444; }
 
 /* Active Month Banner */
 .active-month-banner {
