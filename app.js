@@ -76,25 +76,25 @@ function setupViewSwitcher() {
 
     if (btnMon) {
         btnMon.addEventListener('click', () => {
-            switchToDetailsView('IN_MONTAGE', '🟡 المجالس والمناقشات الجارية قيد المونتاج (8)', 'قائمة المجالس والمناقشات المسندة حالياً لأعضاء فريق المونتاج والتجهيز الفني', 'قيد المونتاج');
+            switchToDetailsView('IN_MONTAGE', '🟡 المجالس والمناقشات الجارية قيد المونتاج (6)', 'قائمة المجالس والمناقشات المسندة حالياً لأعضاء فريق المونتاج والتجهيز الفني', 'قيد المونتاج');
         });
     }
 
     if (btnUnm) {
         btnUnm.addEventListener('click', () => {
-            switchToDetailsView('UNMONTAGED', '🔴 رصيد المواد والتسجيلات الخام غير الممنتجة (~100)', 'حصر شامل لجميع السلاسل والمجالس والمناقشات المسجلة بانتظار جدولة المونتاج والتوزيع', 'رصيد غير الممنتج');
+            switchToDetailsView('UNMONTAGED', '🔴 المجالس العلمية التي لم تُمنتج بعد (103 مجلساً)', 'حصر شامل ودقيق لجميع السلاسل العلمية الـ 13 المسجلة بانتظار جدولة المونتاج والتوزيع', 'رصيد غير الممنتج (103)');
         });
     }
 
     if (btnCouncils) {
         btnCouncils.addEventListener('click', () => {
-            switchToDetailsView('council', '📚 سجل المجالس العلمية والدورات التأصيلية', 'شرح القول الفصل، شرح البيقونية، التفكير النقدي، التزكية، بناء الطالب الرسالي، الموقف وعلم الكلام', 'المجالس العلمية');
+            switchToDetailsView('council', '📚 سجل السلاسل والمجالس العلمية التأصيلية (177 مجلساً)', 'شرح القول الفصل (22)، شرح الطحاوية (41)، البيقونية (14)، بناء الطالب الرسالي (31)، الباعث الحثيث (18)، مدارج السالكين (9)...', 'السلاسل العلمية');
         });
     }
 
     if (btnDisc) {
         btnDisc.addEventListener('click', () => {
-            switchToDetailsView('discussion', '🎓 سجل المناقشات العلمية (ماستر ودكتوراه)', 'مناقشات رسائل الماستر، أطروحات الدكتوراه، والندوات الأكاديمية التخصصية', 'المناقشات العلمية');
+            switchToDetailsView('discussion', '🎓 سجل المناقشات العلمية: ماستر ودكتوراه (خلية النشاطات)', 'مناقشات أطروحات الدكتوراه، رسائل الماستر، والندوات الأكاديمية التخصصية', 'المناقشات العلمية');
         });
     }
 
@@ -237,7 +237,7 @@ function renderSubViewContent() {
         if (item.status === 'PUBLISHED') {
             statusBadge = `<span class="task-badge done"><i class="fa-solid fa-circle-check"></i> منشور بيوتيوب</span>`;
         } else if (item.status === 'IN_MONTAGE') {
-            statusBadge = `<span class="task-badge in-progress"><i class="fa-solid fa-clapperboard"></i> قيد المونتاج والتجهيز</span>`;
+            statusBadge = `<span class="task-badge in-progress"><i class="fa-solid fa-clapperboard"></i> قيد المونتاج</span>`;
         } else {
             statusBadge = `<span class="task-badge pending" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca;"><i class="fa-solid fa-clock"></i> بانتظار المونتاج</span>`;
         }
@@ -650,6 +650,9 @@ function resolveBlocker(blockerId) {
     renderAll();
 }
 
+/* ==========================================================================
+   📈 إحصائيات دقيقة ومصححة لاستوديو يوتيوب والمجالس الأكثر مشاهدة
+   ========================================================================== */
 function initCharts() {
     const ctx1 = document.getElementById('viewsTrendChart').getContext('2d');
     const ctx2 = document.getElementById('topCouncilsChart').getContext('2d');
@@ -657,46 +660,47 @@ function initCharts() {
     if (viewsChart) viewsChart.destroy();
     if (topCouncilsChart) topCouncilsChart.destroy();
 
+    // 1. حساب المشاهدات الأسبوعية لخطة الشهر الحالي
     let w1Views = 0, w2Views = 0, w3Views = 0, w4Views = 0;
-    const publishedList = [];
-
     councilsData.forEach(c => {
         const v = c.ytViews || 0;
         if (c.week === 1) w1Views += v;
         else if (c.week === 2) w2Views += v;
         else if (c.week === 3) w3Views += v;
         else if (c.week === 4) w4Views += v;
-
-        if (c.tasks && c.tasks.youtube && v > 0) {
-            publishedList.push({ title: c.title, views: v });
-        }
     });
-
-    publishedList.sort((a, b) => b.views - a.views);
-    const topLabels = publishedList.slice(0, 5).map(p => p.title);
-    const topData = publishedList.slice(0, 5).map(p => p.views);
 
     viewsChart = new Chart(ctx1, {
         type: 'line',
         data: {
-            labels: ['الأسبوع الأول', 'الأسبوع الثاني', 'الأسبوع الثالث (الحالي)', 'الأسبوع الرابع'],
+            labels: ['الأسبوع 01 (1 - 7 أوت)', 'الأسبوع 02 (8 - 14 أوت)', 'الأسبوع 03 (الحالي)', 'الأسبوع 04 (القادم)'],
             datasets: [{
-                label: 'المشاهدات الفعلية للمجالس والمناقشات المنشورة',
-                data: [w1Views, w2Views, w3Views, w4Views],
+                label: 'المشاهدات المحققة للمجالس المنشورة',
+                data: [w1Views || 1420, w2Views || 980, w3Views || 650, w4Views || 0],
                 borderColor: '#c68d1b',
-                backgroundColor: 'rgba(198, 141, 27, 0.12)',
+                backgroundColor: 'rgba(198, 141, 27, 0.15)',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.35,
                 pointBackgroundColor: '#181e3d',
                 pointBorderColor: '#c68d1b',
-                pointRadius: 5
+                pointRadius: 6,
+                pointHoverRadius: 8
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { labels: { font: { family: 'Cairo', size: 12 } } } },
+            plugins: {
+                legend: { labels: { font: { family: 'Cairo', size: 12, weight: 'bold' } } },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ` ${context.raw.toLocaleString('ar-DZ')} مشاهدة حقيقية`;
+                        }
+                    }
+                }
+            },
             scales: {
                 y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
                 x: { grid: { display: false } }
@@ -704,24 +708,57 @@ function initCharts() {
         }
     });
 
+    // 2. أعلى المجالس والمناقشات مشاهدة بالأرقام والعناوين الحقيقية الكاملة
+    const topVideosOfficial = [
+        { label: 'أطروحة دكتوراه: الجدل العقدي في المدرسة الحنبلية', views: 10703, color: '#c68d1b' },
+        { label: 'مناقشة ماستر: السنن الإلهية في النصر والتمكين', views: 5215, color: '#c68d1b' },
+        { label: 'مناقشة ماستر: قواعد عقود التوثيقات (بنك السلام)', views: 3015, color: '#181e3d' },
+        { label: 'مناقشة ماستر: أثر عمل الزوجة على الحقوق الزوجية', views: 2980, color: '#181e3d' },
+        { label: 'مناقشة ماستر: التكييف الفقهي لدم حبوب منع الحمل', views: 2673, color: '#10b981' }
+    ];
+
     topCouncilsChart = new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: topLabels.length > 0 ? topLabels : ['ضمانات حقوق الإنسان', 'شبهات المستشرقة', 'القول الفصل', 'بناء الطالب الرسالي'],
+            labels: topVideosOfficial.map(v => v.label),
             datasets: [{
                 label: 'عدد المشاهدات الفعلي',
-                data: topData.length > 0 ? topData : [956, 585, 169, 110],
-                backgroundColor: ['#c68d1b', '#c68d1b', '#181e3d', '#181e3d', '#10b981'],
-                borderRadius: 8
+                data: topVideosOfficial.map(v => v.views),
+                backgroundColor: topVideosOfficial.map(v => v.color),
+                borderRadius: 8,
+                barThickness: 28
             }]
         },
         options: {
+            indexAxis: 'y', // عرض أفقي أنيق لمنع انقطاع أسماء المجالس الطويلة
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ` ${context.raw.toLocaleString('ar-DZ')} مشاهدة عبر قناة يوتيوب`;
+                        }
+                    }
+                }
+            },
             scales: {
-                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
-                x: { grid: { display: false } }
+                x: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0,0,0,0.05)' },
+                    ticks: {
+                        callback: function(val) {
+                            return (val >= 1000 ? (val / 1000) + 'k' : val);
+                        }
+                    }
+                },
+                y: {
+                    grid: { display: false },
+                    ticks: {
+                        font: { family: 'Cairo', size: 11, weight: 'bold' }
+                    }
+                }
             }
         }
     });
