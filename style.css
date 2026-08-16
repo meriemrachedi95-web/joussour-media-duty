@@ -1294,22 +1294,39 @@ button {
     border: 1px solid var(--border-gold);
     box-shadow: var(--shadow-sm);
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .chart-card h3 {
-    font-size: 1.05rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 0.25rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: var(--brand-navy);
 }
 
+.chart-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
 .chart-wrapper {
     position: relative;
-    height: 280px;
+    height: 300px;
     width: 100%;
+    margin-top: auto;
+}
+
+.donut-wrapper {
+    height: 290px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Blockers */
