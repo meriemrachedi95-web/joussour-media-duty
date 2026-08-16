@@ -1,6 +1,6 @@
 /**
  * منطق لوحة تحكم فريق الإنتاج والمجالس العلمية
- * نادي جسور العلمي - النافذة المنبثقة الذكية لسجل مجالس ومناقشات الموسم
+ * نادي جسور العلمي - نظام الواجهات المستقلة (SPA View Switcher) والجدول الأكاديمي
  */
 
 const MONTHS_CONFIG = {
@@ -29,15 +29,15 @@ let currentSearchQuery = "";
 let viewsChart = null;
 let topCouncilsChart = null;
 
-// مستودع سجل الموسم الشامل
+// قاعدة بيانات سجل الموسم الشامل
 let seasonalInventory = typeof SEASONAL_INVENTORY_DATA !== 'undefined' ? SEASONAL_INVENTORY_DATA : [];
-let currentModalFilter = "all";
-let currentModalSearch = "";
+let currentSubFilter = "all";
+let currentSubSearch = "";
 
 document.addEventListener('DOMContentLoaded', () => {
     setupMonthNavigation();
     setupEventListeners();
-    setupPanoramaInteractiveModal();
+    setupViewSwitcher();
     loadMonthData(activeMonth);
 });
 
@@ -51,54 +51,50 @@ function getCouncilType(title) {
 }
 
 /* ==========================================================================
-   🌟 تفاعلية نافذة سجل الموسم المنبثقة الذكية (Modal View)
+   🔄 SPA VIEW SWITCHER (التبديل بين الواجهة الرئيسية وواجهة التفاصيل المستقلة)
    ========================================================================== */
-function setupPanoramaInteractiveModal() {
-    const invModal = document.getElementById('inventoryDetailModal');
+function setupViewSwitcher() {
+    const mainView = document.getElementById('mainDashboardView');
+    const detailsView = document.getElementById('seasonalDetailsView');
+
     const btnPub = document.getElementById('btnPanoPublished');
     const btnMon = document.getElementById('btnPanoInMontage');
     const btnUnm = document.getElementById('btnPanoUnmontaged');
     const btnViews = document.getElementById('btnPanoViews');
     const btnCouncils = document.getElementById('btnFilterCouncilsOnly');
     const btnDisc = document.getElementById('btnFilterDiscussionsOnly');
-    const btnOpenFull = document.getElementById('btnOpenFullArchive');
 
-    const btnClose = document.getElementById('btnCloseInvModal');
-    const btnCloseBottom = document.getElementById('btnCloseInvModalBottom');
+    const btnBackTop = document.getElementById('btnBackToMain');
+    const btnBackBottom = document.getElementById('btnBackToMainBottom');
 
+    // أزرار الانتقال من شريط الرادار بالواجهة الرئيسية
     if (btnPub) {
         btnPub.addEventListener('click', () => {
-            openInventoryModal('PUBLISHED', '🟢 المجالس والمناقشات المنشورة رسمياً على يوتيوب (144)', 'قائمة بكافة المجالس والمناقشات التي تم مونتاجها وتدقيقها ونشرها بالقناة مع روابط المشاهدة');
+            switchToDetailsView('PUBLISHED', '🟢 المجالس والمناقشات المنشورة على يوتيوب (144)', 'سجل أكاديمي مفصل بكافة المجالس والمناقشات المنشورة مع أرقام المجالس والروابط الرسمية', 'المجالس المنشورة');
         });
     }
 
     if (btnMon) {
         btnMon.addEventListener('click', () => {
-            openInventoryModal('IN_MONTAGE', '🟡 المجالس والمناقشات الجارية قيد المونتاج والتصدير (8)', 'المجالس والمناقشات المسندة حالياً لأعضاء فريق المونتاج والتجهيز الفني');
+            switchToDetailsView('IN_MONTAGE', '🟡 المجالس والمناقشات الجارية قيد المونتاج (8)', 'قائمة المجالس والمناقشات المسندة حالياً لأعضاء فريق المونتاج والتجهيز الفني', 'قيد المونتاج');
         });
     }
 
     if (btnUnm) {
         btnUnm.addEventListener('click', () => {
-            openInventoryModal('UNMONTAGED', '🔴 رصيد المواد والتسجيلات الخام غير الممنتجة (~100)', 'قائمة شاملة بالسلاسل والمجالس والمناقشات المسجلة بانتظار جدولة المونتاج والتوزيع');
+            switchToDetailsView('UNMONTAGED', '🔴 رصيد المواد والتسجيلات الخام غير الممنتجة (~100)', 'حصر شامل لجميع السلاسل والمجالس والمناقشات المسجلة بانتظار جدولة المونتاج والتوزيع', 'رصيد غير الممنتج');
         });
     }
 
     if (btnCouncils) {
         btnCouncils.addEventListener('click', () => {
-            openInventoryModal('council', '📚 سجل المجالس العلمية والدورات التأصيلية', 'شرح القول الفصل، شرح البيقونية، التفكير النقدي، التزكية، بناء الطالب الرسالي، الموقف وعلم الكلام');
+            switchToDetailsView('council', '📚 سجل المجالس العلمية والدورات التأصيلية', 'شرح القول الفصل، شرح البيقونية، التفكير النقدي، التزكية، بناء الطالب الرسالي، الموقف وعلم الكلام', 'المجالس العلمية');
         });
     }
 
     if (btnDisc) {
         btnDisc.addEventListener('click', () => {
-            openInventoryModal('discussion', '🎓 سجل المناقشات العلمية (ماستر ودكتوراه)', 'مناقشات رسائل الماستر، أطروحات الدكتوراه، والندوات الأكاديمية التخصصية');
-        });
-    }
-
-    if (btnOpenFull) {
-        btnOpenFull.addEventListener('click', () => {
-            openInventoryModal('all', '📖 السجل الأرشيفي الشامل للموسم (2025 - 2026)', 'قاعدة البيانات المتكاملة لكافة المجالس والمناقشات العلمية المنشورة وقيد المونتاج والمتبقية');
+            switchToDetailsView('discussion', '🎓 سجل المناقشات العلمية (ماستر ودكتوراه)', 'مناقشات رسائل الماستر، أطروحات الدكتوراه، والندوات الأكاديمية التخصصية', 'المناقشات العلمية');
         });
     }
 
@@ -109,99 +105,124 @@ function setupPanoramaInteractiveModal() {
         });
     }
 
-    if (btnClose) btnClose.addEventListener('click', () => invModal.classList.remove('active'));
-    if (btnCloseBottom) btnCloseBottom.addEventListener('click', () => invModal.classList.remove('active'));
+    // أزرار الرجوع إلى الواجهة الأساسية
+    if (btnBackTop) btnBackTop.addEventListener('click', switchToMainView);
+    if (btnBackBottom) btnBackBottom.addEventListener('click', switchToMainView);
 
-    // أزرار الفلترة داخل النافذة المنبثقة
-    document.querySelectorAll('.modal-chips-wrapper .exp-chip').forEach(chip => {
+    // أزرار الفلترة داخل واجهة التفاصيل المستقلة
+    document.querySelectorAll('.subview-chips-list .exp-chip').forEach(chip => {
         chip.addEventListener('click', () => {
-            document.querySelectorAll('.modal-chips-wrapper .exp-chip').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.subview-chips-list .exp-chip').forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
-            currentModalFilter = chip.dataset.filter;
-            renderModalInventory();
+            currentSubFilter = chip.dataset.subfilter;
+            renderSubViewContent();
         });
     });
 
-    const searchInput = document.getElementById('modalSearchInput');
+    const searchInput = document.getElementById('subviewSearchInput');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            currentModalSearch = e.target.value.trim().toLowerCase();
-            renderModalInventory();
+            currentSubSearch = e.target.value.trim().toLowerCase();
+            renderSubViewContent();
         });
     }
 
-    const btnGrid = document.getElementById('btnModalGrid');
-    const btnTable = document.getElementById('btnModalTable');
-    const gridEl = document.getElementById('modalCardsGrid');
-    const tableEl = document.getElementById('modalTableContainer');
+    // أزرار التبديل بين الجدول الأكاديمي والبطاقات في واجهة التفاصيل
+    const btnSubTable = document.getElementById('btnSubTable');
+    const btnSubGrid = document.getElementById('btnSubGrid');
+    const tableContainer = document.getElementById('subviewTableContainer');
+    const gridContainer = document.getElementById('subviewGridContainer');
 
-    if (btnGrid && btnTable) {
-        btnGrid.addEventListener('click', () => {
-            btnGrid.classList.add('active');
-            btnTable.classList.remove('active');
-            gridEl.style.display = 'grid';
-            tableEl.style.display = 'none';
+    if (btnSubTable && btnSubGrid) {
+        btnSubTable.addEventListener('click', () => {
+            btnSubTable.classList.add('active');
+            btnSubGrid.classList.remove('active');
+            tableContainer.style.display = 'block';
+            gridContainer.style.display = 'none';
         });
 
-        btnTable.addEventListener('click', () => {
-            btnTable.classList.add('active');
-            btnGrid.classList.remove('active');
-            gridEl.style.display = 'none';
-            tableEl.style.display = 'block';
+        btnSubGrid.addEventListener('click', () => {
+            btnSubGrid.classList.add('active');
+            btnSubTable.classList.remove('active');
+            tableContainer.style.display = 'none';
+            gridContainer.style.display = 'grid';
         });
     }
 }
 
-function openInventoryModal(filterType, title, subtitle) {
-    currentModalFilter = filterType;
-    const invModal = document.getElementById('inventoryDetailModal');
-    
-    document.getElementById('invModalTitle').innerHTML = `<i class="fa-solid fa-layer-group"></i> ${title}`;
-    document.getElementById('invModalSubtitle').textContent = subtitle;
+function switchToMainView() {
+    const mainView = document.getElementById('mainDashboardView');
+    const detailsView = document.getElementById('seasonalDetailsView');
 
-    document.querySelectorAll('.modal-chips-wrapper .exp-chip').forEach(chip => {
-        if (chip.dataset.filter === filterType) {
+    detailsView.style.display = 'none';
+    mainView.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function switchToDetailsView(filterType, title, subtitle, breadcrumbText) {
+    const mainView = document.getElementById('mainDashboardView');
+    const detailsView = document.getElementById('seasonalDetailsView');
+
+    currentSubFilter = filterType;
+    document.getElementById('subviewTitle').textContent = title;
+    document.getElementById('subviewSubtitle').textContent = subtitle;
+    document.getElementById('subviewBreadcrumbCurrent').textContent = breadcrumbText || 'التفاصيل';
+
+    // تحديث الشريحة النشطة
+    document.querySelectorAll('.subview-chips-list .exp-chip').forEach(chip => {
+        if (chip.dataset.subfilter === filterType) {
             chip.classList.add('active');
         } else {
             chip.classList.remove('active');
         }
     });
 
-    renderModalInventory();
-    invModal.classList.add('active');
+    renderSubViewContent();
+
+    mainView.style.display = 'none';
+    detailsView.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function renderModalInventory() {
-    const grid = document.getElementById('modalCardsGrid');
-    const tbody = document.getElementById('modalTableBody');
-    const countEl = document.getElementById('modalFilteredCount');
-    if (!grid || !tbody) return;
+function renderSubViewContent() {
+    const tbody = document.getElementById('subviewTableBody');
+    const grid = document.getElementById('subviewGridContainer');
+    const countBadge = document.getElementById('subviewItemsCount');
+    if (!tbody || !grid) return;
 
-    grid.innerHTML = '';
     tbody.innerHTML = '';
+    grid.innerHTML = '';
 
     const filtered = seasonalInventory.filter(item => {
         let matchesFilter = true;
-        if (currentModalFilter === 'PUBLISHED') matchesFilter = (item.status === 'PUBLISHED');
-        else if (currentModalFilter === 'IN_MONTAGE') matchesFilter = (item.status === 'IN_MONTAGE');
-        else if (currentModalFilter === 'UNMONTAGED') matchesFilter = (item.status === 'UNMONTAGED');
-        else if (currentModalFilter === 'council') matchesFilter = (item.category === 'council');
-        else if (currentModalFilter === 'discussion') matchesFilter = (item.category === 'discussion');
+        if (currentSubFilter === 'PUBLISHED') matchesFilter = (item.status === 'PUBLISHED');
+        else if (currentSubFilter === 'IN_MONTAGE') matchesFilter = (item.status === 'IN_MONTAGE');
+        else if (currentSubFilter === 'UNMONTAGED') matchesFilter = (item.status === 'UNMONTAGED');
+        else if (currentSubFilter === 'council') matchesFilter = (item.category === 'council');
+        else if (currentSubFilter === 'discussion') matchesFilter = (item.category === 'discussion');
 
         let matchesSearch = true;
-        if (currentModalSearch) {
+        if (currentSubSearch) {
             const targetStr = `${item.title} ${item.series} ${item.instructor} ${item.councilNumber}`.toLowerCase();
-            matchesSearch = targetStr.includes(currentModalSearch);
+            matchesSearch = targetStr.includes(currentSubSearch);
         }
 
         return matchesFilter && matchesSearch;
     });
 
-    if (countEl) {
-        countEl.textContent = `عرض ${filtered.length} من أصل ${seasonalInventory.length} عنصراً`;
+    if (countBadge) {
+        countBadge.textContent = `عرض ${filtered.length} من أصل ${seasonalInventory.length} عنصراً`;
     }
 
     if (filtered.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                    <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 0.5rem; display: block; color: var(--brand-gold);"></i>
+                    لا توجد نتائج تطابق معايير البحث والفلترة المحددة.
+                </td>
+            </tr>
+        `;
         grid.innerHTML = `
             <div class="empty-blockers" style="grid-column: 1/-1;">
                 <i class="fa-solid fa-folder-open"></i>
@@ -212,9 +233,6 @@ function renderModalInventory() {
     }
 
     filtered.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'council-card';
-        
         let statusBadge = '';
         if (item.status === 'PUBLISHED') {
             statusBadge = `<span class="task-badge done"><i class="fa-solid fa-circle-check"></i> منشور بيوتيوب</span>`;
@@ -228,10 +246,26 @@ function renderModalInventory() {
             ? `<span class="category-tag tag-discussion"><i class="fa-solid fa-graduation-cap"></i> مناقشة</span>` 
             : `<span class="category-tag tag-council"><i class="fa-solid fa-book-open"></i> مجلس</span>`;
 
-        const numText = item.councilNumber ? `<span class="council-meta">رقم المجلس: #${item.councilNumber}</span>` : '';
+        const numText = item.councilNumber ? `<span class="council-meta">#${item.councilNumber}</span>` : '-';
         const ytBtn = item.videoUrl ? `<a href="${item.videoUrl}" target="_blank" class="btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; text-decoration: none; color: var(--danger);"><i class="fa-brands fa-youtube"></i> فتح الفيديو</a>` : '';
-        const viewsText = item.views > 0 ? `<span style="color: var(--brand-gold); font-weight: 800;"><i class="fa-solid fa-eye"></i> ${item.views.toLocaleString('ar-DZ')} مشاهدة</span>` : '';
+        const viewsText = item.views > 0 ? `<strong>${item.views.toLocaleString('ar-DZ')} مشاهدة</strong> ` : '';
 
+        // سطر الجدول الأكاديمي
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>#${item.id}</strong></td>
+            <td><strong>${item.title}</strong></td>
+            <td>${typeBadge} <small style="color: var(--text-muted);">${item.series}</small></td>
+            <td>${numText}</td>
+            <td><strong>${item.instructor}</strong></td>
+            <td>${statusBadge}</td>
+            <td>${viewsText} ${ytBtn}</td>
+        `;
+        tbody.appendChild(tr);
+
+        // بطاقة الـ Grid
+        const card = document.createElement('div');
+        card.className = 'council-card';
         card.innerHTML = `
             <div class="council-header">
                 <div>${typeBadge}</div>
@@ -245,23 +279,11 @@ function renderModalInventory() {
                 </div>
             </div>
             <div class="council-footer" style="margin-top: auto;">
-                <div>${numText} ${viewsText}</div>
+                <div><span class="council-meta">المجلس: ${numText}</span> ${viewsText}</div>
                 <div>${ytBtn}</div>
             </div>
         `;
         grid.appendChild(card);
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td><strong>#${item.id}</strong></td>
-            <td><strong>${item.title}</strong></td>
-            <td>${typeBadge} <small>${item.series}</small></td>
-            <td><span class="council-meta">${item.councilNumber ? '#' + item.councilNumber : '-'}</span></td>
-            <td>${item.instructor}</td>
-            <td>${statusBadge}</td>
-            <td>${item.views > 0 ? `<strong>${item.views.toLocaleString('ar-DZ')} مشاهدة</strong> ` : ''} ${ytBtn}</td>
-        `;
-        tbody.appendChild(tr);
     });
 }
 
