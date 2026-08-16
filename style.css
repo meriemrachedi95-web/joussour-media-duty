@@ -256,77 +256,6 @@ body {
     100% { transform: scale(0.9); opacity: 0.7; }
 }
 
-/* Active Month Banner */
-.active-month-banner {
-    background: linear-gradient(135deg, #ffffff, var(--brand-gold-light));
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border-gold);
-    padding: 1.5rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.banner-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: var(--brand-navy);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 800;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-full);
-    margin-bottom: 0.5rem;
-}
-
-.banner-info h2 {
-    font-size: 1.4rem;
-    font-weight: 900;
-    color: var(--brand-navy);
-}
-
-.banner-info p {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    margin-top: 0.2rem;
-}
-
-.banner-stats {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-}
-
-.stat-mini {
-    background: #ffffff;
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius-md);
-    padding: 0.75rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.2rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.stat-mini-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-muted);
-}
-
-.stat-mini-value {
-    font-size: 1.1rem;
-    font-weight: 900;
-    color: var(--brand-navy);
-}
-
-.status-active { color: var(--success); }
-
 /* ==========================================================================
    🌟 DEDICATED SECTION: بانوراما الموسم ورادار مجالس الإنتاج 🌟
    ========================================================================== */
@@ -438,7 +367,7 @@ body {
 
 .pano-published .pano-icon { background: rgba(16, 185, 129, 0.2); color: #34d399; }
 .pano-in-montage .pano-icon { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-.pano-pending .pano-icon { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+.pano-unmontaged .pano-icon { background: rgba(239, 68, 68, 0.2); color: #f87171; }
 .pano-views .pano-icon { background: rgba(217, 140, 24, 0.25); color: #fbbf24; }
 
 .pano-data {
@@ -468,13 +397,79 @@ body {
 
 .pano-subtext {
     font-size: 0.75rem;
-    color: #94a3b8;
+    color: #cbd5e1;
     font-weight: 600;
+}
+
+/* Category Breakdown Box (مجالس vs مناقشات) */
+.category-breakdown-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+}
+
+.cat-col {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.cat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--brand-gold);
+}
+
+.cat-header h4 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.cat-stats-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.cat-stat-chip {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.cat-stat-chip.in-progress-chip {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.cat-stat-chip.pending-chip {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.cat-desc {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    line-height: 1.5;
 }
 
 /* Progress Box */
 .panorama-progress-box {
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: var(--radius-md);
     padding: 1.25rem 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -511,7 +506,7 @@ body {
 
 .seg-published { background: #10b981; }
 .seg-montage { background: #f59e0b; }
-.seg-pending { background: #3b82f6; }
+.seg-pending { background: #ef4444; }
 
 .progress-legend {
     display: flex;
@@ -538,7 +533,78 @@ body {
 
 .dot-published { background: #10b981; }
 .dot-montage { background: #f59e0b; }
-.dot-pending { background: #3b82f6; }
+.dot-pending { background: #ef4444; }
+
+/* Active Month Banner */
+.active-month-banner {
+    background: linear-gradient(135deg, #ffffff, var(--brand-gold-light));
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-gold);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.banner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--brand-navy);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    margin-bottom: 0.5rem;
+}
+
+.banner-info h2 {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--brand-navy);
+}
+
+.banner-info p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 0.2rem;
+}
+
+.banner-stats {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.stat-mini {
+    background: #ffffff;
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-mini-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.stat-mini-value {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--brand-navy);
+}
+
+.status-active { color: var(--success); }
 
 /* Buttons & Main Content */
 button {
@@ -759,7 +825,7 @@ button {
     padding: 0.55rem 2.4rem 0.55rem 1rem;
     font-size: 0.88rem;
     color: var(--text-main);
-    width: 240px;
+    width: 220px;
     transition: var(--transition-fast);
 }
 
@@ -891,6 +957,28 @@ button {
     font-size: 0.85rem;
     font-weight: 700;
     color: var(--brand-gold);
+}
+
+.category-tag {
+    font-size: 0.72rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-full);
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.tag-discussion {
+    background: rgba(147, 51, 234, 0.12);
+    color: #9333ea;
+    border: 1px solid rgba(147, 51, 234, 0.25);
+}
+
+.tag-council {
+    background: var(--brand-navy-subtle);
+    color: var(--brand-navy);
+    border: 1px solid var(--border-gold);
 }
 
 .task-pipeline-list {
@@ -1225,6 +1313,9 @@ button {
     .banner-stats {
         width: 100%;
         justify-content: space-between;
+    }
+    .category-breakdown-box {
+        grid-template-columns: 1fr;
     }
     .analytics-grid {
         grid-template-columns: 1fr;
