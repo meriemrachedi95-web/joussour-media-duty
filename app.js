@@ -1,11 +1,10 @@
 /**
  * منطق لوحة تحكم فريق الإنتاج والمجالس العلمية
- * نادي جسور العلمي - خطة أوت 2026
- * الربط مع: Firebase Firestore (joussour-media)
+ * نادي جسور العلمي - منظومة الأرشيف السنوي وإدارة الأشهر
  */
 
-// قائمة الـ 28 مجلساً ومناقشة لشهر أوت 2026
-const INITIAL_COUNCILS_DATA = [
+// خطة أوت 2026 (الخطة الحالية والنشطة)
+const AUGUST_2026_DATA = [
     // الأسبوع الأول (1 - 7 أوت 2026)
     { id: 1, week: 1, day: "السبت", date: "2026-08-01", title: "شبهات المستشرقة حول النسوية", assignee: "مريم", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 420 },
     { id: 2, week: 1, day: "الأحد", date: "2026-08-02", title: "التعليل الفقهي عند القاضي عبد الوهاب", assignee: "نعمة", tasks: { transcription: true, design: true, montage: true, youtube: true }, ytViews: 310 },
@@ -43,6 +42,23 @@ const INITIAL_COUNCILS_DATA = [
     { id: 28, week: 4, day: "الجمعة", date: "2026-08-28", title: "القول الفصل 20", assignee: "أ. أشواق", tasks: { transcription: false, design: false, montage: false, youtube: false }, ytViews: 0 }
 ];
 
+// معلومات الأشهر في الأرشيف
+const MONTHS_CONFIG = {
+    "january": { name: "جانفي 2026", desc: "أرشيف المجالس والأنشطة لشهر جانفي 2026", status: "مؤرشف", total: 16, defaultData: [] },
+    "february": { name: "فيفري 2026", desc: "أرشيف المجالس والأنشطة لشهر فيفري 2026", status: "مؤرشف", total: 18, defaultData: [] },
+    "march": { name: "مارس 2026", desc: "أرشيف المجالس والأنشطة لشهر مارس 2026", status: "مؤرشف", total: 20, defaultData: [] },
+    "april": { name: "أفريل 2026", desc: "أرشيف المجالس والأنشطة لشهر أفريل 2026", status: "مؤرشف", total: 22, defaultData: [] },
+    "may": { name: "ماي 2026", desc: "أرشيف المجالس والأنشطة لشهر ماي 2026", status: "مؤرشف", total: 24, defaultData: [] },
+    "june": { name: "جوان 2026", desc: "أرشيف المجالس والأنشطة لشهر جوان 2026", status: "مؤرشف", total: 25, defaultData: [] },
+    "july": { name: "جويلية 2026", desc: "أرشيف المجالس والأنشطة لشهر جويلية 2026", status: "مكتمل ومؤرشف", total: 26, defaultData: [] },
+    "august": { name: "أوت 2026 (الشهر الحالي)", desc: "متابعة إنجاز الـ 28 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر عبر يوتيوب.", status: "نشط ومحدث", total: 28, defaultData: AUGUST_2026_DATA },
+    "september": { name: "سبتمبر 2026 (الخطة القادمة)", desc: "خطة شهر سبتمبر 2026 - جاهزة لاستقبال وتعيين مجالس الشهر القادم.", status: "قيد الإعداد", total: 0, defaultData: [] },
+    "october": { name: "أكتوبر 2026", desc: "خطة شهر أكتوبر 2026", status: "مستقبلي", total: 0, defaultData: [] },
+    "november": { name: "نوفمبر 2026", desc: "خطة شهر نوفمبر 2026", status: "مستقبلي", total: 0, defaultData: [] },
+    "december": { name: "ديسمبر 2026", desc: "خطة شهر ديسمبر 2026", status: "مستقبلي", total: 0, defaultData: [] }
+};
+
+let activeMonth = "august";
 let councilsData = [];
 let blockersData = [];
 let currentWeekFilter = "all";
@@ -51,19 +67,42 @@ let currentSearchQuery = "";
 let viewsChart = null;
 let topCouncilsChart = null;
 
-// تهيئة التطبيق عند التحميل
 document.addEventListener('DOMContentLoaded', () => {
-    loadLocalOrFirebaseData();
+    setupMonthNavigation();
+    loadMonthData(activeMonth);
     setupEventListeners();
-    populateCouncilSelectOptions();
-    renderAll();
     initCharts();
 });
 
-function loadLocalOrFirebaseData() {
-    // 1. القراءة المحلية الأولية
-    const savedCouncils = localStorage.getItem('joussour_councils_data');
-    councilsData = savedCouncils ? JSON.parse(savedCouncils) : [...INITIAL_COUNCILS_DATA];
+function setupMonthNavigation() {
+    document.querySelectorAll('.month-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            const selectedMonth = chip.dataset.month;
+            document.querySelectorAll('.month-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            activeMonth = selectedMonth;
+            loadMonthData(activeMonth);
+        });
+    });
+}
+
+function loadMonthData(monthKey) {
+    const config = MONTHS_CONFIG[monthKey] || MONTHS_CONFIG["august"];
+    
+    // تحديث البانر
+    document.getElementById('activeMonthTitle').textContent = `خطة شهر ${config.name}`;
+    document.getElementById('activeMonthDesc').textContent = config.desc;
+    document.getElementById('bannerMonthStatus').textContent = config.status;
+
+    // استرجاع البيانات المخزنة محلياً أو الافتراضية للشهر
+    const storageKey = `joussour_councils_${monthKey}`;
+    const saved = localStorage.getItem(storageKey);
+    
+    if (saved) {
+        councilsData = JSON.parse(saved);
+    } else {
+        councilsData = config.defaultData.length > 0 ? [...config.defaultData] : [];
+    }
 
     const savedBlockers = localStorage.getItem('joussour_blockers_data');
     blockersData = savedBlockers ? JSON.parse(savedBlockers) : [
@@ -77,45 +116,40 @@ function loadLocalOrFirebaseData() {
         }
     ];
 
-    // 2. الاستماع والمزامنة الحية مع Firebase Firestore
-    if (db) {
-        const syncText = document.getElementById('syncText');
-        const syncDot = document.querySelector('.status-dot');
-        
-        syncText.textContent = "Firestore: متصل ومزامن لحظياً";
-        syncDot.className = "status-dot online";
+    document.getElementById('bannerTotalTasks').textContent = `${councilsData.length} مجلس`;
 
-        db.collection("production").doc("august_2026").onSnapshot((doc) => {
+    // ربط Firestore للشهر المحدد
+    if (db) {
+        db.collection("production").doc(`${monthKey}_2026`).onSnapshot((doc) => {
             if (doc.exists) {
                 const cloudData = doc.data();
                 if (cloudData.councils && Array.isArray(cloudData.councils)) {
                     councilsData = cloudData.councils;
+                    localStorage.setItem(storageKey, JSON.stringify(councilsData));
                 }
                 if (cloudData.blockers && Array.isArray(cloudData.blockers)) {
                     blockersData = cloudData.blockers;
+                    localStorage.setItem('joussour_blockers_data', JSON.stringify(blockersData));
                 }
-                localStorage.setItem('joussour_councils_data', JSON.stringify(councilsData));
-                localStorage.setItem('joussour_blockers_data', JSON.stringify(blockersData));
                 renderAll();
-            } else {
-                // البذر الأولي لقاعدة البيانات السحابية (First-time seeding)
+            } else if (councilsData.length > 0) {
                 saveData();
             }
-        }, (error) => {
-            console.warn("خطأ في الاتصال بالسحابة:", error);
-            syncText.textContent = "Firestore: وضع عدم الاتصال";
-            syncDot.className = "status-dot offline";
         });
     }
+
+    populateCouncilSelectOptions();
+    renderAll();
 }
 
 function saveData() {
-    localStorage.setItem('joussour_councils_data', JSON.stringify(councilsData));
+    const storageKey = `joussour_councils_${activeMonth}`;
+    localStorage.setItem(storageKey, JSON.stringify(councilsData));
     localStorage.setItem('joussour_blockers_data', JSON.stringify(blockersData));
     
-    // المزامنة مع Firestore
     if (db) {
-        db.collection("production").doc("august_2026").set({
+        db.collection("production").doc(`${activeMonth}_2026`).set({
+            month: activeMonth,
             councils: councilsData,
             blockers: blockersData,
             updatedAt: new Date().toISOString()
@@ -124,7 +158,6 @@ function saveData() {
 }
 
 function setupEventListeners() {
-    // تبويبات الأسابيع
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -134,19 +167,16 @@ function setupEventListeners() {
         });
     });
 
-    // تصفية الأعضاء
     document.getElementById('memberFilter').addEventListener('change', (e) => {
         currentMemberFilter = e.target.value;
         renderCouncils();
     });
 
-    // شريط البحث
     document.getElementById('searchInput').addEventListener('input', (e) => {
         currentSearchQuery = e.target.value.trim().toLowerCase();
         renderCouncils();
     });
 
-    // تبديل طرق العرض
     const btnGridView = document.getElementById('btnGridView');
     const btnTableView = document.getElementById('btnTableView');
     const gridContainer = document.getElementById('councilsContainer');
@@ -166,13 +196,11 @@ function setupEventListeners() {
         tableContainer.style.display = 'block';
     });
 
-    // نافذة الاستشكالات (Modal)
     const modal = document.getElementById('blockerModal');
     document.getElementById('btnOpenBlockerModal').addEventListener('click', () => modal.classList.add('active'));
     document.getElementById('btnCloseBlockerModal').addEventListener('click', () => modal.classList.remove('active'));
     document.getElementById('btnCancelBlocker').addEventListener('click', () => modal.classList.remove('active'));
 
-    // نموذج إرسال الاستشكال
     document.getElementById('blockerForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const newBlocker = {
@@ -188,10 +216,9 @@ function setupEventListeners() {
         renderAll();
         modal.classList.remove('active');
         document.getElementById('blockerForm').reset();
-        alert('✅ تم إرسال الاستشكال وحفظه في السحابة بنجاح!');
+        alert('✅ تم إرسال الاستشكال بنجاح وتوثيقه في السحابة!');
     });
 
-    // زر تحديث إحصائيات يوتيوب
     document.getElementById('btnRefreshYtAnalytics').addEventListener('click', () => {
         alert('🔄 جاري تحديث بيانات استوديو يوتيوب...');
         initCharts();
@@ -222,8 +249,8 @@ function renderKPIs() {
     let totalViews = 0;
 
     councilsData.forEach(c => {
-        if (c.tasks.montage) completedMontageCount++;
-        if (c.tasks.youtube) publishedYtCount++;
+        if (c.tasks && c.tasks.montage) completedMontageCount++;
+        if (c.tasks && c.tasks.youtube) publishedYtCount++;
         totalViews += (c.ytViews || 0);
     });
 
@@ -259,7 +286,12 @@ function renderGridView(councils) {
     container.innerHTML = '';
 
     if (councils.length === 0) {
-        container.innerHTML = '<div class="empty-blockers" style="grid-column: 1/-1;"><p>لا توجد نتائج تطابق معايير البحث والتصفية المحددة.</p></div>';
+        container.innerHTML = `
+            <div class="empty-blockers" style="grid-column: 1/-1;">
+                <i class="fa-solid fa-folder-open"></i>
+                <p>لا توجد مجالس مدخلة لهذا الشهر بعد. سيتم إدراج جدول الخطة بمجرد اعتمادها!</p>
+            </div>
+        `;
         return;
     }
 
@@ -269,7 +301,7 @@ function renderGridView(councils) {
         card.innerHTML = `
             <div class="council-header">
                 <span class="council-meta">الأسبوع ${c.week} • ${c.day} (${c.date})</span>
-                <span class="task-badge ${c.tasks.montage ? 'done' : 'pending'}">${c.tasks.montage ? 'جاهز للنشر' : 'قيد الإنتاج'}</span>
+                <span class="task-badge ${c.tasks && c.tasks.montage ? 'done' : 'pending'}">${c.tasks && c.tasks.montage ? 'جاهز للنشر' : 'قيد الإنتاج'}</span>
             </div>
             <div>
                 <h3 class="council-title">${c.title}</h3>
@@ -279,33 +311,33 @@ function renderGridView(councils) {
             <div class="task-pipeline-list">
                 <div class="task-pipeline-item">
                     <label class="task-check-label">
-                        <input type="checkbox" ${c.tasks.transcription ? 'checked' : ''} onchange="toggleTask(${c.id}, 'transcription', this.checked)">
+                        <input type="checkbox" ${c.tasks && c.tasks.transcription ? 'checked' : ''} onchange="toggleTask(${c.id}, 'transcription', this.checked)">
                         <span>1. التفريغ والمراجعة</span>
                     </label>
-                    <span class="task-badge ${c.tasks.transcription ? 'done' : 'pending'}">${c.tasks.transcription ? 'منجز' : 'معلق'}</span>
+                    <span class="task-badge ${c.tasks && c.tasks.transcription ? 'done' : 'pending'}">${c.tasks && c.tasks.transcription ? 'منجز' : 'معلق'}</span>
                 </div>
                 <div class="task-pipeline-item">
                     <label class="task-check-label">
-                        <input type="checkbox" ${c.tasks.design ? 'checked' : ''} onchange="toggleTask(${c.id}, 'design', this.checked)">
+                        <input type="checkbox" ${c.tasks && c.tasks.design ? 'checked' : ''} onchange="toggleTask(${c.id}, 'design', this.checked)">
                         <span>2. تصميم البوستر والملحقات</span>
                     </label>
-                    <span class="task-badge ${c.tasks.design ? 'done' : 'pending'}">${c.tasks.design ? 'منجز' : 'معلق'}</span>
+                    <span class="task-badge ${c.tasks && c.tasks.design ? 'done' : 'pending'}">${c.tasks && c.tasks.design ? 'منجز' : 'معلق'}</span>
                 </div>
                 <div class="task-pipeline-item">
                     <label class="task-check-label">
-                        <input type="checkbox" ${c.tasks.montage ? 'checked' : ''} onchange="toggleTask(${c.id}, 'montage', this.checked)">
+                        <input type="checkbox" ${c.tasks && c.tasks.montage ? 'checked' : ''} onchange="toggleTask(${c.id}, 'montage', this.checked)">
                         <span>3. المونتاج والتصدير</span>
                     </label>
-                    <span class="task-badge ${c.tasks.montage ? 'done' : 'pending'}">${c.tasks.montage ? 'منجز' : 'معلق'}</span>
+                    <span class="task-badge ${c.tasks && c.tasks.montage ? 'done' : 'pending'}">${c.tasks && c.tasks.montage ? 'منجز' : 'معلق'}</span>
                 </div>
             </div>
 
             <div class="council-footer">
-                <span class="yt-status-badge ${c.tasks.youtube ? 'published' : 'not-uploaded'}">
-                    <i class="fa-brands fa-youtube"></i> ${c.tasks.youtube ? 'تم النشر على يوتيوب' : 'لم يُنشر بعد'}
+                <span class="yt-status-badge ${c.tasks && c.tasks.youtube ? 'published' : 'not-uploaded'}">
+                    <i class="fa-brands fa-youtube"></i> ${c.tasks && c.tasks.youtube ? 'تم النشر على يوتيوب' : 'لم يُنشر بعد'}
                 </span>
                 <button class="btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="toggleTask(${c.id}, 'youtube', ${!c.tasks.youtube})">
-                    ${c.tasks.youtube ? 'إلغاء النشر' : 'تأكيد النشر'}
+                    ${c.tasks && c.tasks.youtube ? 'إلغاء النشر' : 'تأكيد النشر'}
                 </button>
             </div>
         `;
@@ -324,13 +356,13 @@ function renderTableView(councils) {
             <td><strong>${c.title}</strong></td>
             <td>الأسبوع ${c.week} • ${c.day} <br><small class="text-muted">${c.date}</small></td>
             <td><span class="task-badge" style="background: var(--bg-subtle);">${c.assignee}</span></td>
-            <td><input type="checkbox" ${c.tasks.transcription ? 'checked' : ''} onchange="toggleTask(${c.id}, 'transcription', this.checked)"></td>
-            <td><input type="checkbox" ${c.tasks.design ? 'checked' : ''} onchange="toggleTask(${c.id}, 'design', this.checked)"></td>
-            <td><input type="checkbox" ${c.tasks.montage ? 'checked' : ''} onchange="toggleTask(${c.id}, 'montage', this.checked)"></td>
-            <td><span class="task-badge ${c.tasks.youtube ? 'done' : 'pending'}">${c.tasks.youtube ? '🟢 منشور' : '🔴 معلق'}</span></td>
+            <td><input type="checkbox" ${c.tasks && c.tasks.transcription ? 'checked' : ''} onchange="toggleTask(${c.id}, 'transcription', this.checked)"></td>
+            <td><input type="checkbox" ${c.tasks && c.tasks.design ? 'checked' : ''} onchange="toggleTask(${c.id}, 'design', this.checked)"></td>
+            <td><input type="checkbox" ${c.tasks && c.tasks.montage ? 'checked' : ''} onchange="toggleTask(${c.id}, 'montage', this.checked)"></td>
+            <td><span class="task-badge ${c.tasks && c.tasks.youtube ? 'done' : 'pending'}">${c.tasks && c.tasks.youtube ? '🟢 منشور' : '🔴 معلق'}</span></td>
             <td>
                 <button class="btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="toggleTask(${c.id}, 'montage', ${!c.tasks.montage})">
-                    ${c.tasks.montage ? 'إلغاء الإنجاز' : 'تم المونتاج'}
+                    ${c.tasks && c.tasks.montage ? 'إلغاء الإنجاز' : 'تم المونتاج'}
                 </button>
             </td>
         `;
@@ -341,6 +373,7 @@ function renderTableView(councils) {
 function toggleTask(councilId, taskType, isChecked) {
     const council = councilsData.find(c => c.id === councilId);
     if (council) {
+        if (!council.tasks) council.tasks = {};
         council.tasks[taskType] = isChecked;
         saveData();
         renderAll();
@@ -393,7 +426,6 @@ function initCharts() {
     if (viewsChart) viewsChart.destroy();
     if (topCouncilsChart) topCouncilsChart.destroy();
 
-    // 1. Weekly Growth Chart
     viewsChart = new Chart(ctx1, {
         type: 'line',
         data: {
@@ -401,12 +433,13 @@ function initCharts() {
             datasets: [{
                 label: 'إجمالي المشاهدات الأسبوعية',
                 data: [3580, 4200, 2150, 4800],
-                borderColor: '#2563eb',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                borderColor: '#c68d1b',
+                backgroundColor: 'rgba(198, 141, 27, 0.12)',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.35,
-                pointBackgroundColor: '#2563eb',
+                pointBackgroundColor: '#181e3d',
+                pointBorderColor: '#c68d1b',
                 pointRadius: 5
             }]
         },
@@ -421,7 +454,6 @@ function initCharts() {
         }
     });
 
-    // 2. Top Performing Councils
     topCouncilsChart = new Chart(ctx2, {
         type: 'bar',
         data: {
@@ -429,7 +461,7 @@ function initCharts() {
             datasets: [{
                 label: 'عدد المشاهدات',
                 data: [890, 850, 740, 680, 580],
-                backgroundColor: ['#f59e0b', '#f59e0b', '#3b82f6', '#3b82f6', '#10b981'],
+                backgroundColor: ['#c68d1b', '#c68d1b', '#181e3d', '#181e3d', '#10b981'],
                 borderRadius: 8
             }]
         },
