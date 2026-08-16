@@ -37,6 +37,10 @@
                     <span class="status-dot online"></span>
                     <span id="syncText">Firestore: متصل ومزامن</span>
                 </div>
+                <button class="btn-secondary" id="btnOpenFullArchive">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>سجل الموسم الشامل</span>
+                </button>
                 <button class="btn-primary" id="btnOpenBlockerModal">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span>رفع استشكال / مساعدة</span>
@@ -77,27 +81,27 @@
     <!-- Main Container -->
     <main class="main-content">
 
-        <!-- 🌟 DEDICATED SECTION: المرصد الشامل ورادار إنتاج المجالس والمناقشات العلمية 🌟 -->
+        <!-- 🌟 DEDICATED SECTION: بانوراما الموسم ورادار مجالس الإنتاج 🌟 -->
         <section class="season-panorama-section" id="seasonPanorama">
             <div class="panorama-header">
                 <div class="panorama-title-wrap">
                     <span class="panorama-badge"><i class="fa-solid fa-satellite-dish"></i> استقراء ورادار الإنتاج التراكمي الشامل</span>
                     <h2>المرصد الشامل لمجالس ومناقشات الموسم (سبتمبر 2025 - أوت 2026)</h2>
-                    <p>إحصاء دقيق ومفصل للمحتوى العلمي للنادي مع التمييز بين <strong>المجالس العلمية والدورات</strong> وبين <strong>المناقشات العلمية (ماستر ودكتوراه)</strong>، وحصر رصيد المواد غير الممنتجة المتراكمة. <em>(اضغطي على أي خانة لعرض تفاصيلها بالأسماء والأرقام أدناه)</em>.</p>
+                    <p>إحصاء دقيق للمحتوى العلمي للنادي مع التمييز بين <strong>المجالس العلمية والدورات</strong> وبين <strong>المناقشات العلمية</strong>، وحصر رصيد المواد غير الممنتجة. <em>(اضغطي على أي بطاقة لعرض تفاصيلها في نافذة مخصصة مستقلة)</em>.</p>
                 </div>
                 <div class="panorama-actions">
                     <span class="season-pill"><i class="fa-brands fa-youtube"></i> متصل بـ YouTube API & Telegram</span>
                 </div>
             </div>
 
-            <!-- Panorama KPI Interactive Cards Grid (النقر يفتح التفاصيل فوراً) -->
+            <!-- Panorama KPI Interactive Cards Grid (النقر يفتح النافذة المخصصة مباشرة) -->
             <div class="panorama-kpi-grid">
-                <div class="pano-card pano-published clickable-card" id="btnPanoPublished" title="انقري لعرض كل المجالس المنشورة بيوتيوب">
+                <div class="pano-card pano-published clickable-card" id="btnPanoPublished" title="انقري لعرض كل المجالس المنشورة بيوتيوب في نافذة مستقلة">
                     <div class="pano-icon"><i class="fa-solid fa-circle-check"></i></div>
                     <div class="pano-data">
                         <span class="pano-label">المجالس والمناقشات المنشورة (يوتيوب)</span>
                         <h3 class="pano-value">144 <span class="pano-unit">مجلساً ومناقشة</span></h3>
-                        <span class="pano-subtext">🟢 102 مجلساً علمياً • 42 مناقشة علمية <i class="fa-solid fa-arrow-down-long click-hint"></i></span>
+                        <span class="pano-subtext">🟢 102 مجلساً علمياً • 42 مناقشة علمية <i class="fa-solid fa-arrow-up-right-from-square click-hint"></i></span>
                     </div>
                 </div>
 
@@ -106,7 +110,7 @@
                     <div class="pano-data">
                         <span class="pano-label">قيد المونتاج والتجهيز حالياً</span>
                         <h3 class="pano-value">8 <span class="pano-unit">مجالس ومناقشات</span></h3>
-                        <span class="pano-subtext">🟡 5 مجالس علمية • 3 مناقشات ماستر <i class="fa-solid fa-arrow-down-long click-hint"></i></span>
+                        <span class="pano-subtext">🟡 5 مجالس علمية • 3 مناقشات ماستر <i class="fa-solid fa-arrow-up-right-from-square click-hint"></i></span>
                     </div>
                 </div>
 
@@ -115,7 +119,7 @@
                     <div class="pano-data">
                         <span class="pano-label">رصيد المواد غير الممنتجة (تنتظر المونتاج)</span>
                         <h3 class="pano-value">~100 <span class="pano-unit">مادة ومجلس تراكمي</span></h3>
-                        <span class="pano-subtext">⏳ مواد خام وتسجيلات بحاجة لجدولة المونتاج <i class="fa-solid fa-arrow-down-long click-hint"></i></span>
+                        <span class="pano-subtext">⏳ مواد خام وتسجيلات بحاجة لجدولة المونتاج <i class="fa-solid fa-arrow-up-right-from-square click-hint"></i></span>
                     </div>
                 </div>
 
@@ -124,7 +128,7 @@
                     <div class="pano-data">
                         <span class="pano-label">إجمالي المشاهدات المحققة للموسم</span>
                         <h3 class="pano-value">62,476 <span class="pano-unit">مشاهدة حقيقية</span></h3>
-                        <span class="pano-subtext">👀 عبر 144 فيديو منشور بالقناة <i class="fa-solid fa-arrow-down-long click-hint"></i></span>
+                        <span class="pano-subtext">👀 عبر 144 فيديو منشور بالقناة <i class="fa-solid fa-arrow-down click-hint"></i></span>
                     </div>
                 </div>
             </div>
@@ -134,7 +138,7 @@
                 <div class="cat-col clickable-col" id="btnFilterCouncilsOnly">
                     <div class="cat-header">
                         <i class="fa-solid fa-book-open-reader"></i>
-                        <h4>📚 المجالس العلمية والدورات التأصيلية (عرض القائمة)</h4>
+                        <h4>📚 المجالس العلمية والدورات التأصيلية (فتح التفاصيل)</h4>
                     </div>
                     <div class="cat-stats-row">
                         <div class="cat-stat-chip"><strong>102</strong> منشور بيوتيوب</div>
@@ -147,7 +151,7 @@
                 <div class="cat-col clickable-col" id="btnFilterDiscussionsOnly">
                     <div class="cat-header">
                         <i class="fa-solid fa-graduation-cap"></i>
-                        <h4>🎓 المناقشات العلمية: ماستر ودكتوراه (عرض القائمة)</h4>
+                        <h4>🎓 المناقشات العلمية: ماستر ودكتوراه (فتح التفاصيل)</h4>
                     </div>
                     <div class="cat-stats-row">
                         <div class="cat-stat-chip"><strong>42</strong> منشورة بيوتيوب</div>
@@ -177,67 +181,12 @@
             </div>
         </section>
 
-        <!-- 🔍 DEDICATED SEASONAL INVENTORY EXPLORER (مستكشف وتفاصيل المجالس بالأسماء والأرقام) 🔍 -->
-        <section class="seasonal-explorer-section" id="seasonalInventoryExplorer">
-            <div class="section-header">
-                <div>
-                    <h2><i class="fa-solid fa-table-list"></i> تفاصيل وسجل مجالس ومناقشات الموسم (بالعناوين والأرقام)</h2>
-                    <p class="section-desc" id="explorerSubtitle">عرض تفصيلي لكل مجلس ومناقشة برقم المجلس، السلسلة، المحاضر/الباحث، وحالة المونتاج والنشر برابط مباشر.</p>
-                </div>
-                <div class="view-switch">
-                    <button class="view-btn active" id="btnExplorerGrid" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
-                    <button class="view-btn" id="btnExplorerTable" title="عرض الجدول"><i class="fa-solid fa-table"></i></button>
-                </div>
-            </div>
-
-            <!-- Explorer Filters Bar -->
-            <div class="explorer-controls-bar">
-                <div class="explorer-chips-list">
-                    <button class="exp-chip active" data-filter="all">الكل (<span id="countAll">221</span>)</button>
-                    <button class="exp-chip chip-published" data-filter="PUBLISHED">🟢 المنشورة بيوتيوب (<span id="countPub">144</span>)</button>
-                    <button class="exp-chip chip-montage" data-filter="IN_MONTAGE">🟡 قيد المونتاج (<span id="countMon">8</span>)</button>
-                    <button class="exp-chip chip-unmontaged" data-filter="UNMONTAGED">🔴 بانتظار المونتاج (<span id="countUnm">~100</span>)</button>
-                    <button class="exp-chip chip-councils" data-filter="council">📚 المجالس العلمية (<span id="countCouncils">138</span>)</button>
-                    <button class="exp-chip chip-discussions" data-filter="discussion">🎓 المناقشات العلمية (<span id="countDiscussions">83</span>)</button>
-                </div>
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="explorerSearchInput" placeholder="بحث باسم السلسلة أو رقم المجلس أو الموضوع...">
-                </div>
-            </div>
-
-            <!-- Explorer Cards Container -->
-            <div class="councils-grid" id="explorerCardsContainer">
-                <!-- Dynamically populated via app.js & seasonal_inventory.js -->
-            </div>
-
-            <!-- Explorer Table Container (Initially Hidden) -->
-            <div class="councils-table-wrapper" id="explorerTableContainer" style="display: none; margin-top: 1.25rem;">
-                <table class="councils-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>المجلس / المناقشة والموضوع</th>
-                            <th>السلسلة / التصنيف</th>
-                            <th>رقم المجلس</th>
-                            <th>المحاضر / الباحث</th>
-                            <th>الحالة</th>
-                            <th>المشاهدات / يوتيوب</th>
-                        </tr>
-                    </thead>
-                    <tbody id="explorerTableBody">
-                        <!-- Populated via JS -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
         <!-- Active Month Banner -->
         <section class="active-month-banner">
             <div class="banner-info">
-                <span class="banner-badge"><i class="fa-solid fa-calendar-check"></i> الخطة الشهرية النشطة</span>
+                <span class="banner-badge"><i class="fa-solid fa-calendar-check"></i> الخطة الشهرية النشطة لفريق الإعلام</span>
                 <h2 id="activeMonthTitle">خطة شهر أوت 2026: جدول مناقشات الماستر والمجالس العلمية</h2>
-                <p id="activeMonthDesc">متابعة إنجاز الـ 34 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر الحقيقي عبر يوتيوب.</p>
+                <p id="activeMonthDesc">جدول المهام المباشر لأعضاء الفريق: التفريغ والمراجعة، تصميم البوسترات، المونتاج، والمتابعة الحية.</p>
             </div>
             <div class="banner-stats">
                 <div class="stat-mini">
@@ -340,12 +289,12 @@
             </div>
         </section>
 
-        <!-- 3. Production Tasks Pipeline (Monthly) -->
+        <!-- 3. Production Tasks Pipeline (خطة مهام الشهر المباشرة لأعضاء الفريق) -->
         <section class="pipeline-section">
             <div class="section-header">
                 <div>
                     <h2><i class="fa-solid fa-list-check"></i> جدول خطة الإنتاج وتتبع المجالس والمناقشات (شهر أوت)</h2>
-                    <p class="section-desc">متابعة دقيقة لمراحل الإنتاج (تفريغ، تصميم البوستر، المونتاج، والنشر على يوتيوب) مع توثيق تصنيف المجلس واسم المسؤول ورابط المشاهدة.</p>
+                    <p class="section-desc">يمكن لكل عضو في الفريق تعليم خانة الإنجاز (تفريغ، تصميم، مونتاج) مباشرة ليتم تحديثها سحابياً ولدى الجميع فورياً.</p>
                 </div>
                 <div class="view-switch">
                     <button class="view-btn active" id="btnGridView" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
@@ -426,6 +375,71 @@
         </section>
 
     </main>
+
+    <!-- 🌟 DEDICATED MODAL: نافذة تفاصيل مجالس ومناقشات الموسم المنبثقة 🌟 -->
+    <div class="modal-overlay" id="inventoryDetailModal">
+        <div class="modal-dialog modal-dialog-wide">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <h3 id="invModalTitle"><i class="fa-solid fa-layer-group"></i> تفاصيل وسجل مجالس ومناقشات الموسم</h3>
+                    <p class="modal-subtitle" id="invModalSubtitle">عرض تفصيلي لكل مجلس ومناقشة بالأسماء، الأرقام، والروابط المباشرة</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="view-switch" style="background: rgba(0,0,0,0.05);">
+                        <button class="view-btn active" id="btnModalGrid" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
+                        <button class="view-btn" id="btnModalTable" title="عرض الجدول"><i class="fa-solid fa-table"></i></button>
+                    </div>
+                    <button class="btn-close" id="btnCloseInvModal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <!-- Modal Filters Toolbar -->
+            <div class="modal-filter-toolbar">
+                <div class="modal-chips-wrapper">
+                    <button class="exp-chip active" data-filter="all">الكل (221)</button>
+                    <button class="exp-chip chip-published" data-filter="PUBLISHED">🟢 المنشورة بيوتيوب (144)</button>
+                    <button class="exp-chip chip-montage" data-filter="IN_MONTAGE">🟡 قيد المونتاج (8)</button>
+                    <button class="exp-chip chip-unmontaged" data-filter="UNMONTAGED">🔴 بانتظار المونتاج (~100)</button>
+                    <button class="exp-chip chip-councils" data-filter="council">📚 المجالس العلمية</button>
+                    <button class="exp-chip chip-discussions" data-filter="discussion">🎓 المناقشات العلمية</button>
+                </div>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="modalSearchInput" placeholder="بحث سريع باسم السلسلة أو رقم المجلس...">
+                </div>
+            </div>
+
+            <!-- Modal Body (Scrollable Cards/Table) -->
+            <div class="modal-body-scroll">
+                <div class="councils-grid" id="modalCardsGrid">
+                    <!-- Populated via JS -->
+                </div>
+                <div class="councils-table-wrapper" id="modalTableContainer" style="display: none;">
+                    <table class="councils-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>المجلس / المناقشة والموضوع</th>
+                                <th>السلسلة / التصنيف</th>
+                                <th>رقم المجلس</th>
+                                <th>المحاضر / الباحث</th>
+                                <th>الحالة</th>
+                                <th>المشاهدات / يوتيوب</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalTableBody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <span class="footer-count" id="modalFilteredCount">عرض 221 عنصراً</span>
+                <button type="button" class="btn-primary" id="btnCloseInvModalBottom">إغلاق النافذة</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Blocker Modal -->
     <div class="modal-overlay" id="blockerModal">
