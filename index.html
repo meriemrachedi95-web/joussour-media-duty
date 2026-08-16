@@ -330,12 +330,12 @@
                 </div>
             </section>
 
-            <!-- YouTube Analytics & Studio Growth (تم إصلاح الرسوم البيانية بدقة فائقة) -->
+            <!-- 🌟 YouTube Analytics & Monthly Production Trackers (المخططات البيانية الجديدة) 🌟 -->
             <section class="analytics-section" id="analyticsSection">
                 <div class="section-header">
                     <div>
-                        <h2><i class="fa-brands fa-youtube"></i> إحصائيات استوديو يوتيوب ونمو القناة</h2>
-                        <p class="section-desc">مواكبة نسب المشاهدات الفعلية، نمو التفاعل، والمجالس الأكثر مشاهدة وتأثيراً بالأرقام والأسماء الدقيقة.</p>
+                        <h2><i class="fa-brands fa-youtube"></i> إحصائيات استوديو يوتيوب ومسار التزام الإنتاج لشهر أوت</h2>
+                        <p class="section-desc">دائرة نسبية لتوزيع المشاهدات على المجالس المنشورة + مؤشر دقيق لمدى الالتزام بالمهام المبرمجة أسبوعياً.</p>
                     </div>
                     <button class="btn-secondary" id="btnRefreshYtAnalytics">
                         <i class="fa-solid fa-arrows-rotate"></i> تحديث الإحصائيات الحية
@@ -343,17 +343,21 @@
                 </div>
 
                 <div class="analytics-grid">
+                    <!-- Chart 1: الدائرة النسبية لتوزيع المجالس المنشورة ونسب المشاهدات -->
                     <div class="chart-card">
-                        <h3><i class="fa-solid fa-chart-line"></i> نمو المشاهدات الأسبوعية للمجالس والمناقشات</h3>
-                        <div class="chart-wrapper">
-                            <canvas id="viewsTrendChart"></canvas>
+                        <h3><i class="fa-solid fa-chart-pie"></i> الدائرة النسبية للمجالس المنشورة وتوزيع المشاهدات</h3>
+                        <p class="chart-subtitle">توضح الحصة النسبية للمشاهدات بين السلاسل والمناقشات المنشورة في الشهر الحالي.</p>
+                        <div class="chart-wrapper donut-wrapper">
+                            <canvas id="publishedViewsDonutChart"></canvas>
                         </div>
                     </div>
 
+                    <!-- Chart 2: مخطط مسار الإنتاج والالتزام بالمهام -->
                     <div class="chart-card">
-                        <h3><i class="fa-solid fa-ranking-star"></i> أعلى المجالس والمناقشات مشاهدة على القناة</h3>
+                        <h3><i class="fa-solid fa-chart-gantt"></i> مؤشر مسار الإنتاج والالتزام بمهام الشهر (المخطط vs المنجز)</h3>
+                        <p class="chart-subtitle">رصد دقيق لمستوى التزام الفريق بالمهام المبرمجة لكل أسبوع من أسابيع الشهر.</p>
                         <div class="chart-wrapper">
-                            <canvas id="topCouncilsChart"></canvas>
+                            <canvas id="complianceTrackingChart"></canvas>
                         </div>
                     </div>
                 </div>
