@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة متابعة فريق الإنتاج والمجالس العلمية | نادي جسور العلمي</title>
+    <meta name="description" content="منصة متكاملة لأمينة الإعلام وفريق الإنتاج لمتابعة خطة النشر الأسبوعية والشهرية، رصد إنجاز المجالس، متابعة استوديو يوتيوب، ورفع الاستشكالات.">
+    <!-- Google Fonts: Cairo & Readex Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for YouTube Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand-wrapper">
+                <div class="logo-circle">
+                    <i class="fa-solid fa-film"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>منصة متابعة فريق الإنتاج والمجالس</h1>
+                    <span class="sub-brand">خلية الإعلام • نادي جسور العلمي • خطة أوت 2026</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="sync-badge" id="syncStatus">
+                    <span class="status-dot online"></span>
+                    <span id="syncText">قاعدة البيانات: متصل</span>
+                </div>
+                <button class="btn-primary" id="btnOpenBlockerModal">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>رفع استشكال / طلب مساعدة</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- 1. Top KPI Summary Cards -->
+        <section class="kpi-section" aria-label="الإحصائيات العامة">
+            <div class="kpi-card" id="kpiProgressCard">
+                <div class="kpi-icon progress-icon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div class="kpi-data">
+                    <span class="kpi-label">نسبة الإنجاز العامة</span>
+                    <h2 class="kpi-value" id="kpiProgress">0%</h2>
+                    <div class="progress-track">
+                        <div class="progress-bar" id="kpiProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon councils-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div class="kpi-data">
+                    <span class="kpi-label">إجمالي المجالس المبرمجة</span>
+                    <h2 class="kpi-value" id="kpiTotalCouncils">28</h2>
+                    <span class="kpi-hint"><span id="kpiDoneCount">0</span> منجز • <span id="kpiPendingCount">28</span> متبقي</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon youtube-icon">
+                    <i class="fa-brands fa-youtube"></i>
+                </div>
+                <div class="kpi-data">
+                    <span class="kpi-label">استوديو يوتيوب</span>
+                    <h2 class="kpi-value" id="kpiYoutubeViews">0</h2>
+                    <span class="kpi-hint"><span id="kpiPublishedYt">0</span> مجلساً منشوراً • المشاهدات أسبوعياً</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon blockers-icon">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <div class="kpi-data">
+                    <span class="kpi-label">الاستشكالات والدعم</span>
+                    <h2 class="kpi-value" id="kpiBlockersCount">0</h2>
+                    <span class="kpi-hint">استشكالات بحاجة لمتابعة</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Controls & Filters -->
+        <section class="controls-section">
+            <div class="tabs-wrapper" role="tablist">
+                <button class="tab-btn active" data-week="all"><i class="fa-solid fa-calendar-days"></i> كل الأسابيع</button>
+                <button class="tab-btn" data-week="1">الأسبوع الأول (1 - 7 أوت)</button>
+                <button class="tab-btn" data-week="2">الأسبوع الثاني (8 - 14 أوت)</button>
+                <button class="tab-btn" data-week="3">الأسبوع الثالث (15 - 21 أوت) <span class="current-badge">الحالي</span></button>
+                <button class="tab-btn" data-week="4">الأسبوع الرابع (22 - 28 أوت)</button>
+            </div>
+
+            <div class="filter-wrapper">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="بحث باسم المجلس أو الموضوع...">
+                </div>
+                <div class="select-box">
+                    <select id="memberFilter">
+                        <option value="all">كل أعضاء الفريق</option>
+                        <option value="مريم">مريم (أمينة الإعلام)</option>
+                        <option value="أ. أشواق">أ. أشواق</option>
+                        <option value="نعمة">نعمة</option>
+                        <option value="هديل">هديل</option>
+                        <option value="خولة">خولة</option>
+                        <option value="معاذ">معاذ</option>
+                        <option value="نور">نور</option>
+                        <option value="خديجة">خديجة</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Production Tasks Pipeline -->
+        <section class="pipeline-section">
+            <div class="section-header">
+                <div>
+                    <h2><i class="fa-solid fa-list-check"></i> جدول خطة الإنتاج ونشر المجالس</h2>
+                    <p class="section-desc">متابعة دقيقة لمراحل الإنتاج (تفريغ، تصميم البوستر، المونتاج، والرفع على يوتيوب) مع توثيق اسم المسؤول والمهلة الزمنية.</p>
+                </div>
+                <div class="view-switch">
+                    <button class="view-btn active" id="btnGridView" title="عرض البطاقات"><i class="fa-solid fa-grip"></i></button>
+                    <button class="view-btn" id="btnTableView" title="عرض الجدول"><i class="fa-solid fa-table-list"></i></button>
+                </div>
+            </div>
+
+            <!-- Cards Container -->
+            <div class="councils-grid" id="councilsContainer">
+                <!-- Dynamically populated via app.js -->
+            </div>
+
+            <!-- Table Container (Initially Hidden) -->
+            <div class="councils-table-wrapper" id="councilsTableContainer" style="display: none;">
+                <table class="councils-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>المجلس والموضوع</th>
+                            <th>الأسبوع / اليوم</th>
+                            <th>المسؤول</th>
+                            <th>التفريغ</th>
+                            <th>التصميم</th>
+                            <th>المونتاج</th>
+                            <th>حالة يوتيوب</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="councilsTableBody">
+                        <!-- Dynamically populated via app.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. YouTube Analytics & Studio Growth -->
+        <section class="analytics-section">
+            <div class="section-header">
+                <div>
+                    <h2><i class="fa-brands fa-youtube"></i> إحصائيات استوديو يوتيوب ونمو القناة</h2>
+                    <p class="section-desc">مواكبة نسب المشاهدات، نمو التفاعل، والمجالس الأكثر مشاهدة لتحسين الجدولة وصناعة المحتوى.</p>
+                </div>
+                <button class="btn-secondary" id="btnRefreshYtAnalytics">
+                    <i class="fa-solid fa-arrows-rotate"></i> تحديث الإحصائيات
+                </button>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="chart-card">
+                    <h3><i class="fa-solid fa-chart-line"></i> نمو المشاهدات الأسبوعية للمجالس</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="viewsTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3><i class="fa-solid fa-ranking-star"></i> المجالس الأكثر مشاهدة وتفاعلاً</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="topCouncilsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Blockers & Assistance Inbox -->
+        <section class="blockers-section">
+            <div class="section-header">
+                <div>
+                    <h2><i class="fa-solid fa-inbox"></i> صندوق الاستشكالات وطلبات مساعدة الفريق</h2>
+                    <p class="section-desc">الاستشكالات والتحديات المرفوعة من أعضاء الفريق لحلها فورياً وضمان عدم تأخر المواعيد.</p>
+                </div>
+            </div>
+
+            <div class="blockers-list" id="blockersList">
+                <!-- Dynamically populated via app.js -->
+                <div class="empty-blockers">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <p>الحمد لله، لا توجد استشكالات معلقة حالياً. سير العمل منتظم!</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Blocker Modal -->
+    <div class="modal-overlay" id="blockerModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-triangle-exclamation"></i> رفع استشكال أو طلب مساعدة</h3>
+                <button class="btn-close" id="btnCloseBlockerModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="blockerForm">
+                <div class="form-group">
+                    <label for="blockerMember">اسم عضو الفريق:</label>
+                    <select id="blockerMember" required>
+                        <option value="">اختر اسمك...</option>
+                        <option value="مريم">مريم (أمينة الإعلام)</option>
+                        <option value="أ. أشواق">أ. أشواق</option>
+                        <option value="نعمة">نعمة</option>
+                        <option value="هديل">هديل</option>
+                        <option value="خولة">خولة</option>
+                        <option value="معاذ">معاذ</option>
+                        <option value="نور">نور</option>
+                        <option value="خديجة">خديجة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="blockerCouncil">المجلس أو المهمة المتعلقة:</label>
+                    <select id="blockerCouncil" required>
+                        <option value="">اختر المجلس...</option>
+                        <!-- Populated via JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="blockerType">نوع الاستشكال:</label>
+                    <select id="blockerType" required>
+                        <option value="تأخر في استلام المادة">تأخر في استلام المادة الصوتية/المرئية</option>
+                        <option value="مشكلة تقنية في المونتاج/التصدير">مشكلة تقنية في برامج المونتاج أو التصدير</option>
+                        <option value="نقص في محتوى التصميم/الملحقات">نقص في الملحقات أو هوية التصميم</option>
+                        <option value="ضيق في الوقت/طلب تمديد الأجل">ضيق في الوقت / طلب تمديد المهلة الزمنية</option>
+                        <option value="أخرى">أخرى (يرجى التوضيح)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="blockerDetails">تفاصيل الاستشكال والمساعدة المطلوبة:</label>
+                    <textarea id="blockerDetails" rows="4" placeholder="اشرح الصعوبة أو الأمر الذي تحتاج مساعدة أمينة الإعلام أو الفريق فيه..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelBlocker">إلغاء</button>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> إرسال الاستشكال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>© 2026 نادي جسور العلمي • خلية الإعلام والمحتوى الرقمي • منصة المتابعة الذكية</p>
+    </footer>
+
+    <!-- Firebase SDK & App Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="firebase_config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
