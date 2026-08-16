@@ -78,9 +78,7 @@ body {
     flex-direction: column;
 }
 
-/* ==========================================================================
-   Header & Brand Navigation
-   ========================================================================== */
+/* Header */
 .app-header {
     background: #ffffff;
     border-bottom: 2px solid var(--border-gold);
@@ -173,9 +171,7 @@ body {
     background-color: var(--warning);
 }
 
-/* ==========================================================================
-   Months Navigation Bar & Archive (شريط الأشهر السنوي)
-   ========================================================================== */
+/* Months Bar */
 .months-nav-bar {
     background: var(--brand-navy);
     color: white;
@@ -260,9 +256,7 @@ body {
     100% { transform: scale(0.9); opacity: 0.7; }
 }
 
-/* ==========================================================================
-   Active Month Banner
-   ========================================================================== */
+/* Active Month Banner */
 .active-month-banner {
     background: linear-gradient(135deg, #ffffff, var(--brand-gold-light));
     border-radius: var(--radius-lg);
@@ -331,13 +325,222 @@ body {
     color: var(--brand-navy);
 }
 
-.status-active {
-    color: var(--success);
-}
+.status-active { color: var(--success); }
 
 /* ==========================================================================
-   Buttons & Controls
+   🌟 DEDICATED SECTION: بانوراما الموسم ورادار مجالس الإنتاج 🌟
    ========================================================================== */
+.season-panorama-section {
+    background: linear-gradient(135deg, var(--brand-navy), hsl(232, 50%, 14%));
+    color: white;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--brand-gold);
+    padding: 2rem 2.2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.season-panorama-section::after {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(217, 140, 24, 0.15), transparent 70%);
+    pointer-events: none;
+}
+
+.panorama-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+}
+
+.panorama-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--brand-gold-gradient);
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 0.25rem 0.85rem;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-gold);
+    margin-bottom: 0.5rem;
+}
+
+.panorama-title-wrap h2 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+}
+
+.panorama-title-wrap p {
+    font-size: 0.92rem;
+    color: #cbd5e1;
+    margin-top: 0.35rem;
+    max-width: 850px;
+}
+
+.season-pill {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Panorama Cards Grid */
+.panorama-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+}
+
+.pano-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    padding: 1.35rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.1rem;
+    transition: var(--transition-fast);
+    backdrop-filter: blur(8px);
+}
+
+.pano-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--brand-gold);
+}
+
+.pano-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.pano-published .pano-icon { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+.pano-in-montage .pano-icon { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.pano-pending .pano-icon { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+.pano-views .pano-icon { background: rgba(217, 140, 24, 0.25); color: #fbbf24; }
+
+.pano-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.pano-label {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+.pano-value {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.pano-unit {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #cbd5e1;
+}
+
+.pano-subtext {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+/* Progress Box */
+.panorama-progress-box {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.progress-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.88rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    color: #e2e8f0;
+}
+
+.progress-stats-summary {
+    font-size: 0.82rem;
+    color: var(--brand-gold);
+}
+
+.multi-progress-track {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    display: flex;
+}
+
+.multi-progress-seg {
+    height: 100%;
+    transition: width 1s ease;
+}
+
+.seg-published { background: #10b981; }
+.seg-montage { background: #f59e0b; }
+.seg-pending { background: #3b82f6; }
+
+.progress-legend {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot-published { background: #10b981; }
+.dot-montage { background: #f59e0b; }
+.dot-pending { background: #3b82f6; }
+
+/* Buttons & Main Content */
 button {
     font-family: inherit;
     cursor: pointer;
@@ -383,9 +586,6 @@ button {
     transform: translateY(-1px);
 }
 
-/* ==========================================================================
-   Main Content Layout
-   ========================================================================== */
 .main-content {
     flex: 1;
     max-width: 1440px;
@@ -397,9 +597,7 @@ button {
     gap: 2.2rem;
 }
 
-/* ==========================================================================
-   1. KPI Summary Cards
-   ========================================================================== */
+/* KPI Monthly Section */
 .kpi-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -482,9 +680,7 @@ button {
     transition: width 0.8s ease-in-out;
 }
 
-/* ==========================================================================
-   2. Controls & Tabs
-   ========================================================================== */
+/* Controls */
 .controls-section {
     display: flex;
     flex-wrap: wrap;
@@ -587,9 +783,7 @@ button {
     font-weight: 700;
 }
 
-/* ==========================================================================
-   3. Pipeline Section & Cards
-   ========================================================================== */
+/* Pipeline & Cards */
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -636,7 +830,6 @@ button {
     box-shadow: var(--shadow-sm);
 }
 
-/* Grid Layout */
 .councils-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -653,6 +846,11 @@ button {
     flex-direction: column;
     gap: 1rem;
     transition: var(--transition-smooth);
+}
+
+.council-card.extra-council {
+    border: 2px dashed var(--brand-gold);
+    background: linear-gradient(180deg, #ffffff, var(--brand-gold-light));
 }
 
 .council-card:hover {
@@ -695,7 +893,6 @@ button {
     color: var(--brand-gold);
 }
 
-/* Task Checklists Inside Card */
 .task-pipeline-list {
     display: flex;
     flex-direction: column;
@@ -789,9 +986,7 @@ button {
     background: var(--brand-navy-subtle);
 }
 
-/* ==========================================================================
-   4. Analytics & Charts
-   ========================================================================== */
+/* Analytics */
 .analytics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
@@ -822,9 +1017,7 @@ button {
     width: 100%;
 }
 
-/* ==========================================================================
-   5. Blockers Section
-   ========================================================================== */
+/* Blockers */
 .blockers-list {
     display: flex;
     flex-direction: column;
@@ -877,9 +1070,7 @@ button {
     font-weight: 700;
 }
 
-/* ==========================================================================
-   Modal Overlay & Forms
-   ========================================================================== */
+/* Modal */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -895,9 +1086,7 @@ button {
     padding: 1.5rem;
 }
 
-.modal-overlay.active {
-    display: flex;
-}
+.modal-overlay.active { display: flex; }
 
 .modal-dialog {
     background: #ffffff;
@@ -987,9 +1176,7 @@ button {
     margin-top: 0.5rem;
 }
 
-/* ==========================================================================
-   Footer
-   ========================================================================== */
+/* Footer */
 .app-footer {
     background: #ffffff;
     border-top: 2px solid var(--border-gold);
@@ -1018,7 +1205,7 @@ button {
     font-weight: 700;
 }
 
-/* Responsive Breakpoints */
+/* Responsive */
 @media (max-width: 768px) {
     .header-container {
         flex-direction: column;
@@ -1027,6 +1214,9 @@ button {
     .header-actions {
         width: 100%;
         justify-content: space-between;
+    }
+    .panorama-header {
+        flex-direction: column;
     }
     .active-month-banner {
         flex-direction: column;
