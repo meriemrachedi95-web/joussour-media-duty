@@ -1,6 +1,6 @@
 /**
  * منطق لوحة تحكم فريق الإنتاج والمجالس العلمية
- * نادي جسور العلمي - منظومة الأرشيف السنوي وإدارة يوتيوب الدقيقة
+ * نادي جسور العلمي - منظومة الأرشيف السنوي والتمييز بين المجالس والمناقشات
  */
 
 const MONTHS_CONFIG = {
@@ -11,7 +11,7 @@ const MONTHS_CONFIG = {
     "may": { name: "ماي 2026", desc: "أرشيف المجالس والأنشطة لشهر ماي 2026", status: "مؤرشف", total: 24, defaultData: [] },
     "june": { name: "جوان 2026", desc: "أرشيف المجالس والأنشطة لشهر جوان 2026", status: "مؤرشف", total: 25, defaultData: [] },
     "july": { name: "جويلية 2026", desc: "أرشيف المجالس والأنشطة لشهر جويلية 2026", status: "مكتمل ومؤرشف", total: 26, defaultData: [] },
-    "august": { name: "أوت 2026 (الشهر الحالي)", desc: "متابعة إنجاز الـ 28 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر الحقيقي عبر يوتيوب.", status: "نشط ومحدث لحظياً", total: 28, defaultData: [] },
+    "august": { name: "أوت 2026 (الشهر الحالي)", desc: "متابعة إنجاز الـ 34 مجلساً ومناقشة ومراحل التفريغ والتصميم والمونتاج والنشر الحقيقي عبر يوتيوب.", status: "نشط ومحدث لحظياً", total: 34, defaultData: [] },
     "september": { name: "سبتمبر 2026 (الخطة القادمة)", desc: "خطة شهر سبتمبر 2026 - جاهزة لاستقبال وتعيين مجالس الشهر القادم.", status: "قيد الإعداد", total: 0, defaultData: [] },
     "october": { name: "أكتوبر 2026", desc: "خطة شهر أكتوبر 2026", status: "مستقبلي", total: 0, defaultData: [] },
     "november": { name: "نوفمبر 2026", desc: "خطة شهر نوفمبر 2026", status: "مستقبلي", total: 0, defaultData: [] },
@@ -23,6 +23,7 @@ let councilsData = [];
 let blockersData = [];
 let topChannelVideos = [];
 let currentWeekFilter = "all";
+let currentCategoryFilter = "all";
 let currentMemberFilter = "all";
 let currentSearchQuery = "";
 let viewsChart = null;
@@ -33,6 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     loadMonthData(activeMonth);
 });
+
+function getCouncilType(title) {
+    if (!title) return "council";
+    const t = title.toLowerCase();
+    if (t.includes("مناقش") || t.includes("ماستر") || t.includes("دكتوراه") || t.includes("أطروحة") || t.includes("مذكرة")) {
+        return "discussion";
+    }
+    return "council";
+}
 
 function setupMonthNavigation() {
     document.querySelectorAll('.month-chip').forEach(chip => {
@@ -60,7 +70,7 @@ function loadMonthData(monthKey) {
     const savedBlockers = localStorage.getItem('joussour_blockers_data');
     blockersData = savedBlockers ? JSON.parse(savedBlockers) : [];
 
-    document.getElementById('bannerTotalTasks').textContent = `${councilsData.length || config.total} مجلس`;
+    document.getElementById('bannerTotalTasks').textContent = `${councilsData.length || config.total} مجلس ومناقشة`;
 
     // ربط واستماع فوري ومباشر لـ Firestore
     if (db) {
@@ -78,7 +88,7 @@ function loadMonthData(monthKey) {
                 if (cloudData.topChannelVideos) {
                     topChannelVideos = cloudData.topChannelVideos;
                 }
-                document.getElementById('bannerTotalTasks').textContent = `${councilsData.length} مجلس`;
+                document.getElementById('bannerTotalTasks').textContent = `${councilsData.length} مجلس ومناقشة`;
                 populateCouncilSelectOptions();
                 renderAll();
                 initCharts();
@@ -114,6 +124,11 @@ function setupEventListeners() {
             currentWeekFilter = btn.dataset.week;
             renderCouncils();
         });
+    });
+
+    document.getElementById('categoryFilter').addEventListener('change', (e) => {
+        currentCategoryFilter = e.target.value;
+        renderCouncils();
     });
 
     document.getElementById('memberFilter').addEventListener('change', (e) => {
@@ -217,10 +232,12 @@ function renderKPIs() {
 
 function getFilteredCouncils() {
     return councilsData.filter(c => {
+        const cType = getCouncilType(c.title);
         const matchesWeek = currentWeekFilter === 'all' || c.week.toString() === currentWeekFilter;
+        const matchesCategory = currentCategoryFilter === 'all' || cType === currentCategoryFilter;
         const matchesMember = currentMemberFilter === 'all' || c.assignee === currentMemberFilter;
         const matchesSearch = !currentSearchQuery || c.title.toLowerCase().includes(currentSearchQuery) || c.assignee.toLowerCase().includes(currentSearchQuery);
-        return matchesWeek && matchesMember && matchesSearch;
+        return matchesWeek && matchesCategory && matchesMember && matchesSearch;
     });
 }
 
@@ -238,18 +255,23 @@ function renderGridView(councils) {
         container.innerHTML = `
             <div class="empty-blockers" style="grid-column: 1/-1;">
                 <i class="fa-solid fa-folder-open"></i>
-                <p>لا توجد مجالس مدخلة لهذا الشهر بعد. سيتم إدراج جدول الخطة بمجرد اعتمادها!</p>
+                <p>لا توجد نتائج تطابق معايير التصفية والبحث المحددة.</p>
             </div>
         `;
         return;
     }
 
     councils.forEach(c => {
+        const cType = getCouncilType(c.title);
         const card = document.createElement('div');
         card.className = `council-card ${c.isExtra ? 'extra-council' : ''}`;
         const isYtPublished = c.tasks && c.tasks.youtube;
         const ytViewsText = isYtPublished ? `<span style="color: var(--brand-gold); font-weight: 800;"><i class="fa-solid fa-eye"></i> ${(c.ytViews||0).toLocaleString('ar-DZ')} مشاهدة</span>` : '';
         const videoBtn = c.videoUrl ? `<a href="${c.videoUrl}" target="_blank" class="btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; text-decoration: none; color: var(--danger);"><i class="fa-brands fa-youtube"></i> فتح الفيديو</a>` : '';
+
+        const typeBadge = cType === "discussion" 
+            ? `<span class="category-tag tag-discussion"><i class="fa-solid fa-graduation-cap"></i> مناقشة علمية</span>` 
+            : `<span class="category-tag tag-council"><i class="fa-solid fa-book-open"></i> مجلس علمي</span>`;
 
         const extraBadge = c.isExtra ? `<span class="task-badge" style="background: var(--brand-gold-light); color: var(--brand-gold); border: 1px solid var(--brand-gold); font-weight: 800;">✨ منشور إضافي من القناة</span>` : '';
 
@@ -261,8 +283,11 @@ function renderGridView(councils) {
                 </span>
             </div>
             <div>
-                ${extraBadge}
-                <h3 class="council-title" style="margin-top: 0.3rem;">${c.title}</h3>
+                <div style="display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.25rem;">
+                    ${typeBadge}
+                    ${extraBadge}
+                </div>
+                <h3 class="council-title">${c.title}</h3>
                 <div class="council-assignee"><i class="fa-solid fa-user-circle"></i> المسؤول: <strong>${c.assignee}</strong></div>
             </div>
 
@@ -306,11 +331,17 @@ function renderTableView(councils) {
     tbody.innerHTML = '';
 
     councils.forEach(c => {
+        const cType = getCouncilType(c.title);
         const isYtPublished = c.tasks && c.tasks.youtube;
+        const typeBadge = cType === "discussion" 
+            ? `<span class="category-tag tag-discussion">مناقشة</span>` 
+            : `<span class="category-tag tag-council">مجلس</span>`;
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><strong>#${c.id}</strong></td>
             <td><strong>${c.title}</strong> ${c.isExtra ? '<span class="task-badge" style="background:var(--brand-gold-light);color:var(--brand-gold);font-size:0.7rem;">إضافي</span>' : ''} ${c.videoUrl ? `<a href="${c.videoUrl}" target="_blank" style="color: var(--danger); font-size: 0.8rem; margin-right: 0.3rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}</td>
+            <td>${typeBadge}</td>
             <td>${c.isExtra ? 'نشر إضافي' : 'الأسبوع ' + c.week} • ${c.day} <br><small class="text-muted">${c.date}</small></td>
             <td><span class="task-badge" style="background: var(--bg-subtle);">${c.assignee}</span></td>
             <td><input type="checkbox" ${c.tasks && c.tasks.transcription ? 'checked' : ''} onchange="toggleTask(${c.id}, 'transcription', this.checked)"></td>
@@ -407,7 +438,7 @@ function initCharts() {
         data: {
             labels: ['الأسبوع الأول', 'الأسبوع الثاني', 'الأسبوع الثالث (الحالي)', 'الأسبوع الرابع'],
             datasets: [{
-                label: 'المشاهدات الفعلية للمجالس المنشورة',
+                label: 'المشاهدات الفعلية للمجالس والمناقشات المنشورة',
                 data: [w1Views, w2Views, w3Views, w4Views],
                 borderColor: '#c68d1b',
                 backgroundColor: 'rgba(198, 141, 27, 0.12)',
